@@ -1,4 +1,8 @@
+const fs = require("fs");
 const http = require("http");
+
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
+const dataObj = JSON.parse(data);
 
 const server = http.createServer((req, res) => {
   const pathname = req.url;
@@ -7,6 +11,11 @@ const server = http.createServer((req, res) => {
     res.end("This is the overview");
   } else if (pathname === "/products") {
     res.end("This is the products");
+  } else if (pathname === "/api") {
+    res.writeHead(200, {
+      "Content-Type": "application/json",
+    });
+    res.end(data);
   } else {
     res.writeHead(404, {
       "Content-Type": "text/html",
