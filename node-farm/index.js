@@ -1,10 +1,11 @@
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
+const slugify = require("slugify");
 
 const replaceTemplate = require("./modules/replaceTemplate");
 
-//! 3 synchronous functions below CANNOT be called insude createServer callback function
+//! 3 synchronous functions below CANNOT be called inside createServer callback function
 const templateOverview = fs.readFileSync(
   `${__dirname}/templates/overview.html`,
   "utf-8",
@@ -20,6 +21,11 @@ const templateProduct = fs.readFileSync(
 
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const dataObj = JSON.parse(data);
+
+const slugs = dataObj.map((element) =>
+  slugify(element.productName, { lower: true }),
+);
+console.log(slugs);
 
 const server = http.createServer((request, response) => {
   const { query, pathname } = url.parse(request.url, true);
