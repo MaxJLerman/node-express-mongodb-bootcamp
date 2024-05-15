@@ -33,12 +33,21 @@ const getDogImage = async () => {
     console.log("random dog image saved to file");
   } catch (error) {
     console.log(error.message);
+    throw error;
   }
 };
 
-getDogImage();
+//* immediately invoked function expression (IIFE)
+//* replaces declaring a function and then immediately calling it afterwards
+(async () => {
+  try {
+    await getDogImage();
+  } catch (error) {
+    console.log("ERROR: " + error.message);
+  }
+})();
 
-//! old method of achieving above function
+//! old method of achieving above function (getDogImage)
 // readFilePromise(`${__dirname}/dog.txt`)
 //   .then((data) => {
 //     console.log(`Breed: ${data}`);
