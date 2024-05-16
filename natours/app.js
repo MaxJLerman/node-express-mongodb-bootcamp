@@ -101,6 +101,41 @@ const deleteTour = (req, res) => {
   });
 };
 
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "route not yet defined",
+  });
+};
+
+const getOneUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "route not yet defined",
+  });
+};
+
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "route not yet defined",
+  });
+};
+
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "route not yet defined",
+  });
+};
+
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "route not yet defined",
+  });
+};
+
 //* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
 app.route("/api/v1/tours").get(getAllTours).post(createTour);
 
@@ -110,6 +145,14 @@ app
   .get(getOneTour)
   .patch(updateTour)
   .delete(deleteTour);
+
+app.route("/api/v1/users").get(getAllUsers).post(createUser);
+
+app
+  .route("/api/v1/users/:id")
+  .get(getOneUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 const port = 3000;
 app.listen(port, () => {
