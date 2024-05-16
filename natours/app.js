@@ -3,7 +3,7 @@ const express = require("express");
 
 const app = express();
 
-app.use(express.json()); //* middleware, in the middle of the request & response, gives us access to props on req property
+app.use(express.json()); //* middleware, in the middle of the request & response, gives us access to props on req parameter
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`),
@@ -15,6 +15,23 @@ app.get("/api/v1/tours", (req, res) => {
     results: tours.length,
     data: {
       tours,
+    },
+  });
+});
+
+app.get("/api/v1/tours/:id", (req, res) => {
+  const id = req.params.id * 1; //* converts string to number
+
+  if (id > tours.length) {
+    return res.status(404).json({ status: "fail", message: "invalid ID" });
+  }
+
+  const tour = tours.find((element) => element.id === id);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      tour,
     },
   });
 });
