@@ -2,10 +2,12 @@ const express = require("express");
 
 const tourController = require("../controllers/tourController");
 
-const { getAllTours, getOneTour, createTour, updateTour, deleteTour } =
+const { checkId, getAllTours, getOneTour, createTour, updateTour, deleteTour } =
   tourController;
 
 const router = express.Router(); //* middleware function created
+
+router.param("id", checkId);
 
 //* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
 router.route("/").get(getAllTours).post(createTour);
