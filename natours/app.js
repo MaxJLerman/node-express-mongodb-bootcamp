@@ -2,14 +2,13 @@ const fs = require("fs");
 const express = require("express");
 
 const app = express();
-
 app.use(express.json()); //* middleware, in the middle of the request & response, gives us access to props on req parameter
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`),
 );
 
-app.get("/api/v1/tours", (req, res) => {
+const getAllTours = (req, res) => {
   res.status(200).json({
     status: "success",
     results: tours.length,
@@ -17,9 +16,9 @@ app.get("/api/v1/tours", (req, res) => {
       tours,
     },
   });
-});
+};
 
-app.get("/api/v1/tours/:id", (req, res) => {
+const getOneTour = (req, res) => {
   const id = req.params.id * 1; //* converts string to number
 
   if (id > tours.length) {
@@ -34,9 +33,9 @@ app.get("/api/v1/tours/:id", (req, res) => {
       tour,
     },
   });
-});
+};
 
-app.post("/api/v1/tours", (req, res) => {
+const createTour = (req, res) => {
   console.log(req.body);
 
   const newId = tours[tours.length - 1].id + 1;
@@ -55,10 +54,10 @@ app.post("/api/v1/tours", (req, res) => {
       });
     },
   );
-});
+};
 
-app.patch("/api/v1/tours/:id", (req, res) => {
-  const id = req.params.id * 1; //* converts string to number
+const updateTour = (req, res) => {
+  const id = req.params.id * 1;
 
   if (id > tours.length) {
     return res.status(404).json({ status: "fail", message: "invalid ID" });
@@ -70,9 +69,9 @@ app.patch("/api/v1/tours/:id", (req, res) => {
       tour: "updated tour here",
     },
   });
-});
+};
 
-app.delete("/api/v1/tours/:id", (req, res) => {
+const deleteTour = (req, res) => {
   const id = req.params.id * 1;
 
   if (id > tours.length) {
@@ -83,15 +82,17 @@ app.delete("/api/v1/tours/:id", (req, res) => {
     status: "success",
     data: null,
   });
-});
+};
 
-// app.get("/", (req, res) => {
-//   res.status(200).json({ message: "Hello from server", app: "Natours" });
-// });
+//* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
+app.route("/api/v1/tours").get(getAllTours).post(createTour);
 
-// app.post("/", (req, res) => {
-//   res.send("You can post to this endpoint");
-// });
+//* rest of the headers do need an id parameter, so can be chained together like so:
+app
+  .route("/api/v1/tours/:id")
+  .get(getOneTour)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 const port = 3000;
 app.listen(port, () => {
