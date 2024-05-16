@@ -1,7 +1,12 @@
 const fs = require("fs");
 const express = require("express");
+const morgan = require("morgan");
 
 const app = express();
+
+//* morgan middleware
+app.use(morgan("dev"));
+
 app.use(express.json()); //* middleware, in the middle of the request & response, gives us access to props on req parameter
 
 //* custom muddlewares
