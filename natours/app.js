@@ -136,23 +136,20 @@ const deleteUser = (req, res) => {
   });
 };
 
+const tourRouter = express.Router(); //* middleware function created
+const userRouter = express.Router();
+
 //* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
-app.route("/api/v1/tours").get(getAllTours).post(createTour);
-
+tourRouter.route("/").get(getAllTours).post(createTour);
 //* rest of the headers do need an id parameter, so can be chained together like so:
-app
-  .route("/api/v1/tours/:id")
-  .get(getOneTour)
-  .patch(updateTour)
-  .delete(deleteTour);
+tourRouter.route("/:id").get(getOneTour).patch(updateTour).delete(deleteTour);
 
-app.route("/api/v1/users").get(getAllUsers).post(createUser);
+userRouter.route("/").get(getAllUsers).post(createUser);
+userRouter.route("/:id").get(getOneUser).patch(updateUser).delete(deleteUser);
 
-app
-  .route("/api/v1/users/:id")
-  .get(getOneUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+app.use("/api/v1/tours", tourRouter); //* using middleware function cretaed above
+//* now created a sub application (router system) for "tours" resource
+app.use("/api/v1/users", userRouter);
 
 const port = 3000;
 app.listen(port, () => {
