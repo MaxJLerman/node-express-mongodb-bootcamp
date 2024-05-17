@@ -6,7 +6,9 @@ const userRouter = require("./routes/userRoutes");
 
 const app = express();
 
-app.use(morgan("dev")); //* morgan middleware
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 app.use(express.json()); //* middleware, in the middle of the request & response, gives us access to props on req parameter
 app.use(express.static(`${__dirname}/public`));
 
