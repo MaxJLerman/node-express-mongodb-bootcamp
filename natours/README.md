@@ -19,6 +19,6 @@ Navigate to the drive where MongoDB was installed. In my case, its Local Disk C.
 Create a new folder called "data"
 
 ```
-Max@DESKTOP-66REFMS MINGW64 /c
+USER@DESKTOP MINGW64 /c
 $ mkdir data
 ```
