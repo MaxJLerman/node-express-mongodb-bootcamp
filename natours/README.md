@@ -78,7 +78,7 @@ To list all existing databases, type "show dbs":
 
 ```
 natours-test> show dbs
-**admin**     40.00 KiB
+<b>admin</b>     40.00 KiB
 **config**   108.00 KiB
 **local**     72.00 KiB
 **natours-test**  40.00 KiB
