@@ -285,3 +285,28 @@ natours-test> db.tours.updateOne({ name: "The Snow Adventurer" }, { $set: { pric
   upsertedCount: 0
 }
 ```
+
+To update all the documents to have a _premium_ property set to "true" where the price is greater than 500 **AND** the rating is greater than or equal to 4.8, use the command below:
+
+```
+natours-test> db.tours.updateMany({ price: { $gt: 500 }, rating: { $gte: 4.8 } }, { $set: { premium: true } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+natours-test> db.tours.find({ price: { $gt: 500 }, rating: { $gte: 4.8 } })
+[
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
+    name: 'The Snow Adventurer',
+    price: 597,
+    rating: 4.9,
+    difficulty: 'easy',
+    premium: true <----------------- new property
+  }
+]
+```
