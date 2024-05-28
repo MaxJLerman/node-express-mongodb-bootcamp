@@ -65,3 +65,22 @@ Now run the "mongosh.exe" file:
 USER@DESKTOP MINGW64 ~/AppData/Local/Programs/mongosh
 $ ./mongosh
 ```
+
+## Using MongoDB Shell
+
+To create a new database or navigate to an existing one, type the command "use" followed by the name of the database you want to connect to:
+
+```
+> use natours-test
+```
+
+To list all existing databases, type "show dbs":
+
+```
+natours-test> show dbs
+**admin**     40.00 KiB
+**config**   108.00 KiB
+**local**     72.00 KiB
+natours-test  40.00 KiB
+natours-test>
+```
