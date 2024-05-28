@@ -22,3 +22,26 @@ Create a new folder called "data"
 USER@DESKTOP MINGW64 /c
 $ mkdir data
 ```
+
+Inside the "data" folder, create a new folder called "db"
+
+```
+USER@DESKTOP MINGW64 /c/data
+$ mkdir db
+```
+
+Now navigate back to the C drive and go to:
+
+```
+USER@DESKTOP MINGW64 /c
+$ cd Program\ Files/MongoDB/Server/AVAILABLE_VERSION/bin
+```
+
+Now run the "mongod.exe" file to run the MongoDB Server:
+
+```
+USER@DESKTOP MINGW64 /c/Program Files/MongoDB/Server/7.0/bin
+$ ./mongod.exe
+```
+
+As the server starts up, you should see that it is listening on port `27017`.
