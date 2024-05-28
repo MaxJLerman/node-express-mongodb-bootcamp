@@ -76,11 +76,9 @@ To create a new database or navigate to an existing one, type the command "use" 
 
 To list all existing databases, type "show dbs":
 
-```
-natours-test> show dbs
-<b>admin</b>     40.00 KiB
-**config**   108.00 KiB
-**local**     72.00 KiB
-**natours-test**  40.00 KiB
-natours-test>
-```
+`natours-test> show dbs`
+`**admin**     40.00 KiB`
+`**config**   108.00 KiB`
+`**local**     72.00 KiB`
+`**natours-test**  40.00 KiB`
+`natours-test>`
