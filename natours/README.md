@@ -126,7 +126,7 @@ tours
 To insert many documents, specify the collection using dot notation and use the command "insertMany":
 
 ```
-natours-test> db.tours.insertMany([{ name: "The Sea Explorer", price: 497, rating: 4.8 }, { name: "The Snow Adventure", price: 997, rating: 4.9, difficulty: easy" }])
+natours-test> db.tours.insertMany([{ name: "The Sea Explorer", price: 497, rating: 4.8 }, { name: "The Snow Adventurer", price: 997, rating: 4.9, difficulty: easy" }])
 {
   acknowledged: true,
   insertedIds: {
@@ -157,7 +157,7 @@ natours-test> db.tours.find()
   },
   {
     _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
-    name: 'The Snow Adventure',
+    name: 'The Snow Adventurer',
     price: 997,
     rating: 4.9,
     difficulty: 'easy'
@@ -182,7 +182,7 @@ natours-test> db.tours.find({ difficulty: "easy" })
 [
   {
     _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
-    name: 'The Snow Adventure',
+    name: 'The Snow Adventurer',
     price: 997,
     rating: 4.9,
     difficulty: 'easy'
@@ -210,7 +210,7 @@ natours-test> db.tours.find({ price: { $lte: 500 } })
 ]
 ```
 
-To query tours with a price less than 500 **and** a rating greater than or equal to 4.8, use the command below:
+To query tours with a price less than 500 **AND** a rating greater than or equal to 4.8, use the command below:
 
 ```
 natours-test> db.tours.find({ price: { $lt: 500 }, rating: { $gte: 4.8 } })
@@ -224,7 +224,7 @@ natours-test> db.tours.find({ price: { $lt: 500 }, rating: { $gte: 4.8 } })
 ]
 ```
 
-To query tours with a price less than 500 **or** a rating greater than or equal to 4.8, use the command below:
+To query tours with a price less than 500 **OR** a rating greater than or equal to 4.8, use the command below:
 
 ```
 natours-test> db.tours.find({ $or: [ { price: { $lt: 500 } }, { rating: { $gte: 4.8 } } ] })
@@ -243,7 +243,7 @@ natours-test> db.tours.find({ $or: [ { price: { $lt: 500 } }, { rating: { $gte: 
   },
   {
     _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
-    name: 'The Snow Adventure',
+    name: 'The Snow Adventurer',
     price: 997,
     rating: 4.9,
     difficulty: 'easy'
@@ -266,7 +266,22 @@ natours-test> db.tours.find({ $or: [ { price: { $lt: 500 } }, { rating: { $gte: 
   },
   {
     _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
-    name: 'The Snow Adventure'
+    name: 'The Snow Adventurer'
   }
 ]
+```
+
+## Updating documents
+
+To update a single document, specify which document should be updated by using any of the properties as the first argument and use the _set_ operator like so:
+
+```
+natours-test> db.tours.updateOne({ name: "The Snow Adventurer" }, { $set: { price: 597 } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
 ```
