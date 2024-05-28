@@ -111,7 +111,7 @@ USER@DESKTOP MINGW64 ~/AppData/Local/Programs/mongosh
 $ mongosh "mongodb+srv://cluster0.jylhnvu.mongodb.net/" --apiVersion 1 --username max
 ```
 
-When prompted, enter the password in the `config.env` file specified as **DATABASE_PASSWORD**.
+When prompted, enter the password in the `config.env` file specified as **DATABASE_PASSWORD**. Then navigate to the _natours_ database with the "use" command and now we can manipulate the documents and collections inside.
 
 ## Inserting documents into a database
 
