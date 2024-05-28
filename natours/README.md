@@ -1,6 +1,6 @@
 # Natours + MongoDB
 
-This README includes how to run MongoDB Shell & MongoDB Server for a local database connection.
+This README includes how to run MongoDB Shell & MongoDB Server for a local database connection. Local database connections are easier to use when developing, but once an application is production ready you should probably switch over to using MongoDB Atlas (or equivalent) instead.
 
 I use Git Bash for my terminal, so if you use another one some commands may differ.
 
@@ -126,7 +126,7 @@ tours
 To insert many documents, specify the collection using dot notation and use the command "insertMany":
 
 ```
-natours-test> db.tours.insertMany([{ name: "The Sea Explorer", price: 497, rating: 4.8 }, { name: "The Snow Adventurer", price: 997, rating: 4.9, difficulty: easy" }])
+natours-test> db.tours.insertMany([{ name: "The Sea Explorer", price: 497, rating: 4.8 }, { name: "The Snow Adventurer", price: 997, rating: 4.9, difficulty: "easy" }])
 {
   acknowledged: true,
   insertedIds: {
@@ -309,4 +309,42 @@ natours-test> db.tours.find({ price: { $gt: 500 }, rating: { $gte: 4.8 } })
     premium: true <----------------- new property
   }
 ]
+```
+
+## Deleting documents
+
+To delete documents with a rating of less that 4.8, use the command below:
+
+```
+natours-test> db.tours.deleteMany({ rating: { $lt: 4.8 } })
+{ acknowledged: true, deletedCount: 1 }
+
+natours-test> db.tours.find()
+[
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf7'),
+    name: 'The Sea Explorer',
+    price: 497,
+    rating: 4.8
+  },
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
+    name: 'The Snow Adventurer',
+    price: 597,
+    rating: 4.9,
+    difficulty: 'easy',
+    premium: true
+  }
+]
+^the tour document with a rating of 4.7 has been deleted.
+```
+
+To delete all the documents in a collection, simply use the command:
+
+```
+natours-test> db.tours.deleteMany({})
+{ acknowledged: true, deletedCount: 2 }
+
+natours-test> db.tours.find()
+        <----------------- returns nothing
 ```
