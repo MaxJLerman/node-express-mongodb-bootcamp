@@ -250,3 +250,23 @@ natours-test> db.tours.find({ $or: [ { price: { $lt: 500 } }, { rating: { $gte: 
   }
 ]
 ```
+
+To specify which fields should be outputted, after the OR object add the desired property set to "1" inside an object like so:
+
+```
+natours-test> db.tours.find({ $or: [ { price: { $lt: 500 } }, { rating: { $gte: 4.8 } } ] }, { name: 1 })
+[
+  {
+    _id: ObjectId('6655c02549eb5a8912cdcdf6'),
+    name: 'The Forest Hiker'
+  },
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf7'),
+    name: 'The Sea Explorer'
+  },
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
+    name: 'The Snow Adventure'
+  }
+]
+```
