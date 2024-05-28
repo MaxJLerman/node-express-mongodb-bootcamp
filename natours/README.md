@@ -18,14 +18,14 @@ Make sure to install MongoDB Compass too in the Server installation process.
 
 Navigate to the drive where MongoDB was installed. In my case, its Local Disk C.
 
-Create a new folder called "data"
+Create a new folder called "data":
 
 ```
 USER@DESKTOP MINGW64 /c
 $ mkdir data
 ```
 
-Inside the "data" folder, create a new folder called "db"
+Inside the "data" folder, create a new folder called "db":
 
 ```
 USER@DESKTOP MINGW64 /c/data
