@@ -122,3 +122,43 @@ Now that the database has a collection, you can view them with the command "show
 natours-test> show collections
 tours
 ```
+
+To insert many documents, specify the collection using dot notation and use the command "insertMany":
+
+```
+natours-test> db.tours.insertMany([{ name: "The Sea Explorer", price: 497, rating: 4.8 }, { name: "The Snow Adventure", price: 997, rating: 4.9, difficulty: easy" }])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6655c2ae49eb5a8912cdcdf7'),
+    '1': ObjectId('6655c2ae49eb5a8912cdcdf8')
+  }
+}
+```
+
+To view all the objects in the **tours** collection, use the "find()" command:
+
+```
+natours-test> db.tours.find()
+[
+  {
+    _id: ObjectId('6655c02549eb5a8912cdcdf6'),
+    name: 'The Forest Hiker',
+    price: 297,
+    rating: 4.7
+  },
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf7'),
+    name: 'The Sea Explorer',
+    price: 497,
+    rating: 4.8
+  },
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
+    name: 'The Snow Adventure',
+    price: 997,
+    rating: 4.9,
+    difficulty: 'easy'
+  }
+]
+```
