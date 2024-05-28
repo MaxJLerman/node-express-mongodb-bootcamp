@@ -104,6 +104,15 @@ local         72.00 KiB
 
 As you can see from the terminal output, natours-test is no longer available (even though it says the name in the terminal input line, this is because the database is empty). To create it again, add a document to a collection in it and it will show as populated in the "show dbs" output once again.
 
+For the purpose of the _Natours_ application, I will be using a cloud-hosted MongoDB Atlas. To connect to it using the MongoDB Shell CLI, navigate to the directory and run the following command:
+
+```
+USER@DESKTOP MINGW64 ~/AppData/Local/Programs/mongosh
+$ mongosh "mongodb+srv://cluster0.jylhnvu.mongodb.net/" --apiVersion 1 --username max
+```
+
+When prompted, enter the password in the `config.env` file specified as **DATABASE_PASSWORD**.
+
 ## Inserting documents into a database
 
 To insert one document, specify the collection using dot notation and use the command "insertOne" like so:
