@@ -138,7 +138,7 @@ natours-test> db.tours.insertMany([{ name: "The Sea Explorer", price: 497, ratin
 
 ## Querying (reading) documents
 
-To view all the objects in the **tours** collection, use the "find()" command:
+To view all the objects in the _tours_ collection, use the "find()" command:
 
 ```
 natours-test> db.tours.find()
@@ -180,6 +180,67 @@ natours-test> db.tours.find({ name: "The Forest Hiker" })
 
 natours-test> db.tours.find({ difficulty: "easy" })
 [
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
+    name: 'The Snow Adventure',
+    price: 997,
+    rating: 4.9,
+    difficulty: 'easy'
+  }
+]
+```
+
+For more elaborate queries, such as querying tours with a price less than or equal to 500, use the command below:
+
+```
+natours-test> db.tours.find({ price: { $lte: 500 } })
+[
+  {
+    _id: ObjectId('6655c02549eb5a8912cdcdf6'),
+    name: 'The Forest Hiker',
+    price: 297,
+    rating: 4.7
+  },
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf7'),
+    name: 'The Sea Explorer',
+    price: 497,
+    rating: 4.8
+  }
+]
+```
+
+To query tours with a price less than 500 **and** a rating greater than or equal to 4.8, use the command below:
+
+```
+natours-test> db.tours.find({ price: { $lt: 500 }, rating: { $gte: 4.8 } })
+[
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf7'),
+    name: 'The Sea Explorer',
+    price: 497,
+    rating: 4.8
+  }
+]
+```
+
+To query tours with a price less than 500 **or** a rating greater than or equal to 4.8, use the command below:
+
+```
+natours-test> db.tours.find({ $or: [ { price: { $lt: 500 } }, { rating: { $gte: 4.8 } } ] })
+[
+  {
+    _id: ObjectId('6655c02549eb5a8912cdcdf6'),
+    name: 'The Forest Hiker',
+    price: 297,
+    rating: 4.7
+  },
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf7'),
+    name: 'The Sea Explorer',
+    price: 497,
+    rating: 4.8
+  },
   {
     _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
     name: 'The Snow Adventure',
