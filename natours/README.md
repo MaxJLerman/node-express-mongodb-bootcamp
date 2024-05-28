@@ -2,6 +2,8 @@
 
 This README includes how to run MongoDB Shell & MongoDB Server for a local database connection.
 
+I use Git Bash for my terminal, so if you use another one some commands may differ.
+
 ## Installing MongoDB Shell & Server
 
 Install MongoDB Shell from [here](https://www.mongodb.com/try/download/shell).
@@ -12,7 +14,7 @@ Install MongoDB Server from [here](https://www.mongodb.com/try/download/communit
 
 Make sure to install MongoDB Compass too in the Server installation process.
 
-## Running MongoDB Shell
+## Running MongoDB Server
 
 Navigate to the drive where MongoDB was installed. In my case, its Local Disk C.
 
@@ -41,7 +43,25 @@ Now run the "mongod.exe" file to run the MongoDB Server:
 
 ```
 USER@DESKTOP MINGW64 /c/Program Files/MongoDB/Server/7.0/bin
-$ ./mongod.exe
+$ ./mongod
 ```
 
 As the server starts up, you should see that it is listening on port `27017`.
+
+## Running MongoDB Shell
+
+Now we need a shell to connect to the server to manipulate our databases.
+
+Navigate to where MongoDB Shell was installed:
+
+```
+USER@DESKTOP MINGW64 ~
+$ cd AppData/Local/Programs/mongosh
+```
+
+Now run the "mongosh.exe" file:
+
+```
+USER@DESKTOP MINGW64 ~/AppData/Local/Programs/mongosh
+$ ./mongosh
+```
