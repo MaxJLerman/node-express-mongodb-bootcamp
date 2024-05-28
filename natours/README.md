@@ -104,7 +104,7 @@ local         72.00 KiB
 
 As you can see from the terminal output, natours-test is no longer available (even though it says the name in the terminal input line, this is because the database is empty). To create it again, add a document to a collection in it and it will show as populated in the "show dbs" output once again.
 
-## Manipulating documents inside a database
+## Inserting documents into a database
 
 To insert one document, specify the collection using dot notation and use the command "insertOne" like so:
 
@@ -136,6 +136,8 @@ natours-test> db.tours.insertMany([{ name: "The Sea Explorer", price: 497, ratin
 }
 ```
 
+## Querying (reading) documents
+
 To view all the objects in the **tours** collection, use the "find()" command:
 
 ```
@@ -153,6 +155,31 @@ natours-test> db.tours.find()
     price: 497,
     rating: 4.8
   },
+  {
+    _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
+    name: 'The Snow Adventure',
+    price: 997,
+    rating: 4.9,
+    difficulty: 'easy'
+  }
+]
+```
+
+To query a particular object, pass in the filter as an object inside the "find()" command:
+
+```
+natours-test> db.tours.find({ name: "The Forest Hiker" })
+[
+  {
+    _id: ObjectId('6655c02549eb5a8912cdcdf6'),
+    name: 'The Forest Hiker',
+    price: 297,
+    rating: 4.7
+  }
+]
+
+natours-test> db.tours.find({ difficulty: "easy" })
+[
   {
     _id: ObjectId('6655c2ae49eb5a8912cdcdf8'),
     name: 'The Snow Adventure',
