@@ -84,3 +84,29 @@ local         72.00 KiB
 natours-test  40.00 KiB
 natours-test>
 ```
+
+To display the name of the database you're currently in, type the command "db":
+
+```
+natours-test> db
+natours-test
+natours-test>
+```
+
+To delete a database, type the command "db.dropDatabase()":
+
+```
+natours-test> db.dropDatabase()
+{ ok: 1, dropped: 'natours-test' }
+natours-test> show dbs
+admin         40.00 KiB
+config       108.00 KiB
+local         72.00 KiB
+natours-test>
+```
+
+As you can see from the terminal output, natours-test is no longer available (even though it says the name in the terminal input line). To create it again, type the "use" command followed by "natours-test" like the example above.
+
+### Inserting documents into a database
+
+yeet
