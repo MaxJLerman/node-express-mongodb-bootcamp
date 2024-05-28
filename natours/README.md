@@ -91,7 +91,7 @@ natours-test> db
 natours-test
 ```
 
-To delete a database, type the command "db.dropDatabase()":
+To delete the contents of a database, navigate to the one you want to drop and type the command "db.dropDatabase()":
 
 ```
 natours-test> db.dropDatabase()
@@ -102,7 +102,7 @@ config       108.00 KiB
 local         72.00 KiB
 ```
 
-As you can see from the terminal output, natours-test is no longer available (even though it says the name in the terminal input line). To create it again, add a document to a collection in it and it will be available once again.
+As you can see from the terminal output, natours-test is no longer available (even though it says the name in the terminal input line, this is because the database is empty). To create it again, add a document to a collection in it and it will show as populated in the "show dbs" output once again.
 
 ## Inserting documents into a database
 
@@ -114,4 +114,11 @@ natours-test> db.tours.insertOne({ name: "The Forest Hiker", price: 297, rating:
   acknowledged: true,
   insertedId: ObjectId('6655c02549eb5a8912cdcdf6')
 }
+```
+
+Now that the database has a collection, you can view them with the command "show collections":
+
+```
+natours-test> show collections
+tours
 ```
