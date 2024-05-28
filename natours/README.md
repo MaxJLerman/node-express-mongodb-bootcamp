@@ -82,7 +82,6 @@ admin         40.00 KiB
 config       108.00 KiB
 local         72.00 KiB
 natours-test  40.00 KiB
-natours-test>
 ```
 
 To display the name of the database you're currently in, type the command "db":
@@ -90,7 +89,6 @@ To display the name of the database you're currently in, type the command "db":
 ```
 natours-test> db
 natours-test
-natours-test>
 ```
 
 To delete a database, type the command "db.dropDatabase()":
@@ -102,11 +100,18 @@ natours-test> show dbs
 admin         40.00 KiB
 config       108.00 KiB
 local         72.00 KiB
-natours-test>
 ```
 
-As you can see from the terminal output, natours-test is no longer available (even though it says the name in the terminal input line). To create it again, type the "use" command followed by "natours-test" like the example above.
+As you can see from the terminal output, natours-test is no longer available (even though it says the name in the terminal input line). To create it again, add a document to a collection in it and it will be available once again.
 
-### Inserting documents into a database
+## Inserting documents into a database
 
-yeet
+To insert one document, specify the collection using dot notation and use the command "insertOne" like so:
+
+```
+natours-test> db.tours.insertOne({ name: "The Forest Hiker", price: 297, rating: 4.7 })
+{
+  acknowledged: true,
+  insertedId: ObjectId('6655c02549eb5a8912cdcdf6')
+}
+```
