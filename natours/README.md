@@ -104,7 +104,7 @@ local         72.00 KiB
 
 As you can see from the terminal output, natours-test is no longer available (even though it says the name in the terminal input line, this is because the database is empty). To create it again, add a document to a collection in it and it will show as populated in the "show dbs" output once again.
 
-## Inserting documents into a database
+## Manipulating documents inside a database
 
 To insert one document, specify the collection using dot notation and use the command "insertOne" like so:
 
