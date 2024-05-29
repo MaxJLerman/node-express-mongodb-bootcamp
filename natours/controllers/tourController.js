@@ -29,17 +29,30 @@ exports.checkBody = (req, res, next) => {
 
 exports.getAllTours = async (req, res) => {
   try {
+    //* filtering out protected fields
     const queryObject = { ...req.query };
     const excludedFields = ["page", "sort", "limit", "fields"];
     excludedFields.forEach((element) => delete queryObject[element]);
 
+    //* advanced filtering, adding MongoDB syntax $
     let queryString = JSON.stringify(queryObject);
     queryString = queryString.replace(
       /\b(gte|gt|lte|lt)\b/g,
       (match) => `$${match}`,
     );
 
-    const query = Tour.find(JSON.parse(queryString));
+    //* build query
+    let query = Tour.find(JSON.parse(queryString));
+
+    //* sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort("-createdAt");
+    }
+
+    //* execute query
     const tours = await query;
 
     res.status(200).json({
