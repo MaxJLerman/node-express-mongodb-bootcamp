@@ -39,7 +39,7 @@ exports.getAllTours = async (req, res) => {
       (match) => `$${match}`,
     );
 
-    const query = Tour.find(queryString);
+    const query = Tour.find(JSON.parse(queryString));
     const tours = await query;
 
     res.status(200).json({
