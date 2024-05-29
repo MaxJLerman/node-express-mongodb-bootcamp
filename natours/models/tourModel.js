@@ -55,6 +55,10 @@ const tourSchema = new mongoose.Schema(
       select: false,
     },
     startDates: [Date],
+    secretTour: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -62,6 +66,7 @@ const tourSchema = new mongoose.Schema(
   },
 );
 
+//? creates a property on a tour object that only exists in the response, not in the database
 tourSchema.virtual("durationWeeks").get(function () {
   return this.duration / 7;
 });
@@ -82,6 +87,21 @@ tourSchema.pre("save", function (next) {
 //* post-save hook: middleware that runs after a "save" or "create" but not "insertMany" event
 tourSchema.post("save", function (document, next) {
   console.log(document);
+
+  next();
+});
+
+//* pre-query hook: middleware that runs before a query is executed, matches all events starting with "find" eg. find, findOne, findOneAndUpdate, findOneAndDelete
+tourSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } }); //? filters out documents that have a "secretTour" property set to true
+
+  this.start = Date.now();
+
+  next();
+});
+
+tourSchema.post(/^find/, function (documents, next) {
+  console.log(`Query took ${Date.now() - this.start} milliseconds`);
 
   next();
 });
