@@ -52,6 +52,13 @@ exports.getAllTours = async (req, res) => {
       query = query.sort("-createdAt");
     }
 
+    //* field limiting
+    query = query.select("-__v"); //? firstly excluding the __v property provided by MongoDB
+    if (req.query.fields) {
+      const fields = req.query.fields.split(",").join(" ");
+      query = query.select(fields);
+    }
+
     //* execute query
     const tours = await query;
 
