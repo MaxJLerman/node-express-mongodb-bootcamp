@@ -117,7 +117,7 @@ exports.getTourStatistics = async (request, response) => {
       {
         $group: {
           _id: { $toUpper: "$difficulty" },
-          numberOfTours: { $sum: 1 }, //? for each of the documents (tours) that goes through the pipeline, 1 is added to the "numberOfTours" counter
+          numberOfTours: { $sum: 1 },
           numberOfRatings: { $sum: "$ratingsQuantity" },
           averageRating: { $avg: "$ratingsAverage" },
           averagePrice: { $avg: "$price" },
@@ -134,6 +134,59 @@ exports.getTourStatistics = async (request, response) => {
       status: "success",
       data: {
         statistics,
+      },
+    });
+  } catch (error) {
+    response.status(404).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+
+exports.getMonthlyPlan = async (request, response) => {
+  try {
+    const year = request.params.year * 1;
+
+    const plan = await Tour.aggregate([
+      {
+        $unwind: "$startDates", //? for each tour document, create a duplicate document each with only of the startDates in the array (removing the one document with one array of startDates)
+      },
+      {
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$startDates" }, //? groups the response objects by the month
+          numberOfTourStarts: { $sum: 1 }, //? for each of the documents (tours) that goes through the pipeline, 1 is added to the "numberOfTourStarts" counter
+          tours: { $push: "$name" }, //? creates an array of the tours taking place in the respective month
+        },
+      },
+      {
+        $addFields: { month: "$_id" }, //? creates a new field with the same value as _id in each document
+      },
+      {
+        $project: {
+          _id: 0, //? hides this property in each document in the response
+        },
+      },
+      {
+        $sort: { numberOfTourStarts: -1 }, //? sort by descending order
+      },
+      {
+        $limit: 12, //? not needed in this case, but is present for reference
+      },
+    ]);
+
+    response.status(200).json({
+      status: "success",
+      data: {
+        plan,
       },
     });
   } catch (error) {
