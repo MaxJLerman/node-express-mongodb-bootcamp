@@ -5,6 +5,7 @@ const tourController = require("../controllers/tourController");
 const {
   checkId,
   checkBody,
+  aliasTopTours,
   getAllTours,
   getOneTour,
   createTour,
@@ -15,6 +16,8 @@ const {
 const router = express.Router(); //* middleware function created
 
 // router.param("id", checkId);
+
+router.route("/top-5-cheap").get(aliasTopTours, getAllTours);
 
 //* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
 router.route("/").get(getAllTours).post(checkBody, createTour);

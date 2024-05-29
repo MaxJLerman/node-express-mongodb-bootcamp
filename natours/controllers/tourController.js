@@ -1,12 +1,12 @@
 const Tour = require("../models/tourModel");
 
 //* no longer need the following two middleware functions, checks are handled by Mongoose Schema now
-//* middleware function, so has access to "next", accepts id parameter so has access to "val" (value of id parameter)
-exports.checkId = (req, res, next, val) => {
-  const id = req.params.id * 1; //* converts string to number
+//* middleware function, so has access to "next", accepts id parameter so has access to "value" (value of id parameter)
+exports.checkId = (request, response, next, value) => {
+  const id = request.params.id * 1; //* converts string to number
 
   if (id > tours.length) {
-    return res.status(404).json({
+    return response.status(404).json({
       status: "fail",
       message: "invalid ID",
     });
@@ -16,9 +16,9 @@ exports.checkId = (req, res, next, val) => {
 };
 
 //* middleware function, so has access to "next"
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    return res.status(400).json({
+exports.checkBody = (request, response, next) => {
+  if (!request.body.name || !request.body.price) {
+    return response.status(400).json({
       status: "fail",
       message: "missing name or price",
     });
@@ -27,10 +27,18 @@ exports.checkBody = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = async (req, res) => {
+exports.aliasTopTours = async (request, response, next) => {
+  requ.query.limit = "5";
+  request.query.sort = "-ratingsAverage,price";
+  request.query.fields = "name,price,ratingsAverage,summary,difficulty";
+
+  next();
+};
+
+exports.getAllTours = async (request, response) => {
   try {
     //* filtering out protected fields
-    const queryObject = { ...req.query };
+    const queryObject = { ...request.query };
     const excludedFields = ["page", "sort", "limit", "fields"];
     excludedFields.forEach((element) => delete queryObject[element]);
 
@@ -45,8 +53,8 @@ exports.getAllTours = async (req, res) => {
     let query = Tour.find(JSON.parse(queryString));
 
     //* sorting
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(",").join(" ");
+    if (request.query.sort) {
+      const sortBy = request.query.sort.split(",").join(" ");
       query = query.sort(sortBy);
     } else {
       query = query.sort("-createdAt");
@@ -54,18 +62,18 @@ exports.getAllTours = async (req, res) => {
 
     //* field limiting
     query = query.select("-__v"); //? firstly excluding the __v property provided by MongoDB
-    if (req.query.fields) {
-      const fields = req.query.fields.split(",").join(" ");
+    if (request.query.fields) {
+      const fields = request.query.fields.split(",").join(" ");
       query = query.select(fields);
     }
 
     //* pagination
-    const page = req.query.page * 1 || 1;
-    const limitAmount = req.query.limit * 1 || 100;
+    const page = request.query.page * 1 || 1;
+    const limitAmount = request.query.limit * 1 || 100;
     const skipAmount = (page - 1) * limitAmount;
     query = query.skip(skipAmount).limit(limitAmount);
 
-    if (req.query.page) {
+    if (request.query.page) {
       const numberOfTours = await Tour.countDocuments();
       if (skipAmount >= numberOfTours) {
         throw new Error("This page does not exist");
@@ -75,89 +83,89 @@ exports.getAllTours = async (req, res) => {
     //* execute query
     const tours = await query;
 
-    res.status(200).json({
+    response.status(200).json({
       status: "success",
-      requestedAt: req.requestTime,
+      requestedAt: request.requestTime,
       results: tours.length,
       data: {
         tours,
       },
     });
   } catch (error) {
-    res.status(404).json({
+    response.status(404).json({
       status: "fail",
       message: error,
     });
   }
 };
 
-exports.getOneTour = async (req, res) => {
+exports.getOneTour = async (request, response) => {
   try {
-    const tour = await Tour.findById(req.params.id);
+    const tour = await Tour.findById(request.params.id);
 
-    res.status(200).json({
+    response.status(200).json({
       status: "success",
       data: {
         tour,
       },
     });
   } catch (error) {
-    res.status(404).json({
+    response.status(404).json({
       status: "fail",
       message: error,
     });
   }
 };
 
-exports.createTour = async (req, res) => {
+exports.createTour = async (request, response) => {
   try {
-    const newTour = await Tour.create(req.body);
+    const newTour = await Tour.create(request.body);
 
-    res.status(201).json({
+    response.status(201).json({
       status: "success",
       data: {
         tour: newTour,
       },
     });
   } catch (error) {
-    res.status(400).json({
+    response.status(400).json({
       status: "fail",
       message: error,
     });
   }
 };
 
-exports.updateTour = async (req, res) => {
+exports.updateTour = async (request, response) => {
   try {
-    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+    const tour = await Tour.findByIdAndUpdate(request.params.id, request.body, {
       new: true,
       runValidators: true,
     });
 
-    res.status(200).json({
+    response.status(200).json({
       status: "success",
       data: {
         tour,
       },
     });
   } catch (error) {
-    res.status(404).json({
+    response.status(404).json({
       status: "fail",
       message: error,
     });
   }
 };
 
-exports.deleteTour = async (req, res) => {
+exports.deleteTour = async (request, response) => {
   try {
-    await Tour.findByIdAndDelete(req.params.id);
+    await Tour.findByIdAndDelete(request.params.id);
 
-    res.status(204).json({
+    response.status(204).json({
       status: "success",
       data: null,
     });
   } catch (error) {
-    res.status(404).json({
+    response.status(404).json({
       status: "fail",
       message: error,
     });
