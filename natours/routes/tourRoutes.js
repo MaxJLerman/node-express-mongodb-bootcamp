@@ -9,11 +9,14 @@ const {
   createTour,
   updateTour,
   deleteTour,
+  getTourStatistics,
 } = tourController;
 
 const router = express.Router(); //* middleware function created
 
 router.route("/top-5-cheap").get(aliasTopTours, getAllTours);
+
+router.route("/tour-statistics").get(getTourStatistics);
 
 //* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
 router.route("/").get(getAllTours).post(createTour);
