@@ -1,3 +1,10 @@
+const AppError = require("../utils/appError");
+
+const handleCastError = (error) => {
+  const message = `Invalid ${error.path}: ${error.value}`;
+  return new AppError(message, 400);
+};
+
 const sendErrorDevelopment = (error, response) => {
   response.status(error.statusCode).json({
     error,
@@ -30,9 +37,15 @@ module.exports = (error, request, response, next) => {
   error.statusCode = error.statusCode || 500;
   error.status = error.status || "error";
 
-  if (provess.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === "development") {
     sendErrorDevelopment(error, response);
-  } else if (provess.env.NODE_ENV === "production") {
-    sendErrorProduction(error, response);
+  } else if (process.env.NODE_ENV === "production") {
+    let errorCopy = { ...error };
+
+    if (error.name === "CastError") {
+      errorCopy = handleCastError(error);
+    }
+
+    sendErrorProduction(errorCopy, response);
   }
 };
