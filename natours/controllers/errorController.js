@@ -1,6 +1,6 @@
 const AppError = require("../utils/appError");
 
-const handleCastError = (error) => {
+const handleDatabaseCastError = (error) => {
   return new AppError(`Invalid ${error.path}: ${error.value}`, 400);
 };
 
@@ -13,7 +13,20 @@ const handleDuplicateFields = (error) => {
   );
 };
 
-const sendErrorDevelopment = (error, response) => {
+handleMongooseValidationError = (error) => {
+  const errorMessages = Object.values(error.errors).map(
+    (element) => element.message,
+  );
+
+  return new AppError(
+    `Invalid input data, Mongoose validation failed: ${errorMessages.join(
+      ". ",
+    )}`,
+    400,
+  );
+};
+
+const sendDevelopmentError = (error, response) => {
   response.status(error.statusCode).json({
     error,
     status: error.status,
@@ -22,7 +35,7 @@ const sendErrorDevelopment = (error, response) => {
   });
 };
 
-const sendErrorProduction = (error, response) => {
+const sendProductionError = (error, response) => {
   //? operational, trusted error: send message to client
   if (error.isOperational) {
     response.status(error.statusCode).json({
@@ -46,18 +59,22 @@ module.exports = (error, request, response, next) => {
   error.status = error.status || "error";
 
   if (process.env.NODE_ENV === "development") {
-    sendErrorDevelopment(error, response);
+    sendDevelopmentError(error, response);
   } else if (process.env.NODE_ENV === "production") {
     let errorCopy = { ...error };
 
     if (error.name === "CastError") {
-      errorCopy = handleCastError(error);
+      errorCopy = handleDatabaseCastError(error);
     }
 
     if (error.code === 11000) {
       errorCopy = handleDuplicateFields(error);
     }
 
-    sendErrorProduction(errorCopy, response);
+    if (error.name === "ValidationError") {
+      error = handleMongooseValidationError(error);
+    }
+
+    sendProductionError(errorCopy, response);
   }
 };
