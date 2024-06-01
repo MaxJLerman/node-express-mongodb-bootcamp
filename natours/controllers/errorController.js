@@ -1,8 +1,16 @@
 const AppError = require("../utils/appError");
 
 const handleCastError = (error) => {
-  const message = `Invalid ${error.path}: ${error.value}`;
-  return new AppError(message, 400);
+  return new AppError(`Invalid ${error.path}: ${error.value}`, 400);
+};
+
+const handleDuplicateFields = (error) => {
+  const duplicateFieldValue = error.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+
+  return new AppError(
+    `Duplicate field value: ${duplicateFieldValue}. Use another value.`,
+    400,
+  );
 };
 
 const sendErrorDevelopment = (error, response) => {
@@ -44,6 +52,10 @@ module.exports = (error, request, response, next) => {
 
     if (error.name === "CastError") {
       errorCopy = handleCastError(error);
+    }
+
+    if (error.code === 11000) {
+      errorCopy = handleDuplicateFields(error);
     }
 
     sendErrorProduction(errorCopy, response);
