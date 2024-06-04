@@ -1,6 +1,7 @@
 const express = require("express");
 
 const tourController = require("../controllers/tourController");
+const authController = require("../controllers/authController");
 
 const {
   aliasTopTours,
@@ -12,6 +13,7 @@ const {
   getTourStatistics,
   getMonthlyPlan,
 } = tourController;
+const { protect } = authController;
 
 const router = express.Router(); //* middleware function created
 
@@ -22,7 +24,7 @@ router.route("/tour-statistics").get(getTourStatistics);
 router.route("/monthly-plan/:year").get(getMonthlyPlan);
 
 //* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
-router.route("/").get(getAllTours).post(createTour);
+router.route("/").get(protect, getAllTours).post(createTour);
 
 //* rest of the headers do need an id parameter, so can be chained together like so:
 router.route("/:id").get(getOneTour).patch(updateTour).delete(deleteTour);
