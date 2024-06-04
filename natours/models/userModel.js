@@ -19,4 +19,12 @@ const userSchema = new mongoose.Schema({
     required: [true, "A user must have a password"],
     minlength: 8,
   },
+  confirmPassword: {
+    type: String,
+    required: [true, "A user must confirm their password"],
+  },
 });
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
