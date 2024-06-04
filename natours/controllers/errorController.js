@@ -1,8 +1,7 @@
 const AppError = require("../utils/appError");
 
-const handleDatabaseCastError = (error) => {
-  return new AppError(`Invalid ${error.path}: ${error.value}`, 400);
-};
+const handleDatabaseCastError = (error) =>
+  new AppError(`Invalid ${error.path}: ${error.value}`, 400);
 
 const handleDuplicateFields = (error) => {
   const duplicateFieldValue = error.errmsg.match(/(["'])(\\?.)*?\1/)[0];
@@ -13,7 +12,7 @@ const handleDuplicateFields = (error) => {
   );
 };
 
-handleMongooseValidationError = (error) => {
+const handleMongooseValidationError = (error) => {
   const errorMessages = Object.values(error.errors).map(
     (element) => element.message,
   );
@@ -25,6 +24,12 @@ handleMongooseValidationError = (error) => {
     400,
   );
 };
+
+const handleJsonWebTokenError = () =>
+  new AppError("Invalid token, try logging in again", 401);
+
+const handleTokenExpiredError = () =>
+  new AppError("Token expired, try logging in again", 401);
 
 const sendDevelopmentError = (error, response) => {
   response.status(error.statusCode).json({
@@ -73,6 +78,14 @@ module.exports = (error, request, response, next) => {
 
     if (error.name === "ValidationError") {
       error = handleMongooseValidationError(error);
+    }
+
+    if (error.name === "JsonWebTokenError") {
+      error = handleJsonWebTokenError();
+    }
+
+    if (error.name === "TokenExpiredError") {
+      error = handleTokenExpiredError();
     }
 
     sendProductionError(errorCopy, response);
