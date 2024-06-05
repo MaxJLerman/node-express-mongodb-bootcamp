@@ -354,6 +354,17 @@ To delete all the documents in a collection, simply use the command:
 natours-test> db.tours.deleteMany({})
 { acknowledged: true, deletedCount: 2 }
 
-natours-test> db.tours.find()
-        <----------------- returns nothing
+natours-test> db.tours.find()     <------- returns nothing
 ```
+
+## Using Mailtrap
+
+- Visit [mailtrap's site](https://mailtrap.io/) and sign up.
+
+- Create an inbox, naming it _appropriately_.
+
+- Switch to VS Code and specify the **host**, **port**, **username** and **password** from your Mailtrap inbox in your Nodemailer transport configuration. _Don't forget to save sensitive information inside environment variables._
+
+- Define the email options: from, to, subject and message body, potentially even HTML.
+
+- Send the email.
