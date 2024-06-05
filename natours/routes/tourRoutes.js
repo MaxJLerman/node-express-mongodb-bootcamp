@@ -13,7 +13,7 @@ const {
   getTourStatistics,
   getMonthlyPlan,
 } = tourController;
-const { protect } = authController;
+const { protect, restrictTo } = authController;
 
 const router = express.Router(); //* middleware function created
 
@@ -27,6 +27,10 @@ router.route("/monthly-plan/:year").get(getMonthlyPlan);
 router.route("/").get(protect, getAllTours).post(createTour);
 
 //* rest of the headers do need an id parameter, so can be chained together like so:
-router.route("/:id").get(getOneTour).patch(updateTour).delete(deleteTour);
+router
+  .route("/:id")
+  .get(getOneTour)
+  .patch(updateTour)
+  .delete(protect, restrictTo("admin", "lead-guide"), deleteTour);
 
 module.exports = router;
