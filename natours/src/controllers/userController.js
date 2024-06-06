@@ -59,6 +59,15 @@ exports.updateCurrentUser = catchAsync(async (request, response, next) => {
   });
 });
 
+exports.deleteCurrentUser = catchAsync(async (request, response, next) => {
+  await User.findByIdAndUpdate(request.user.id, { active: false });
+
+  response.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+
 exports.getOneUser = (request, response) => {
   response.status(500).json({
     status: "error",

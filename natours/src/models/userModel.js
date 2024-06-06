@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 //* runs between getting the data and saving to the database
@@ -58,6 +63,13 @@ userSchema.pre("save", function (next) {
   if (!this.isModified("password") || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
+
+  next();
+});
+
+userSchema.pre(/^find/, function (next) {
+  //? filters out documents that either have an "active" property set to false or don't have an "active" property at all
+  this.find({ active: { $ne: false } });
 
   next();
 });
