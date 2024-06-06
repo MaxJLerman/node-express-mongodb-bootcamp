@@ -175,12 +175,14 @@ exports.resetPassword = catchAsync(async (request, response, next) => {
   //* log user in, send JWT to user
   const token = signToken(user._id);
 
+  console.log("before");
+
   response.status(200).json({
     status: "success",
     token,
   });
 
-  //* redirect user to login page
+  console.log("after");
 
-  next();
+  //* redirect user to login page
 });
