@@ -155,6 +155,16 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    //! using populate creates another query, may hinder performance if used many times all over the place
+    path: "guides", //? populates the guides prop with the User data referenced in each ObjectId (only in the response, not the database)
+    select: "-__v -passwordChangedAt", //? removes the specified props from the populated User array of guides in the response only
+  });
+
+  next();
+});
+
 tourSchema.post(/^find/, function (documents, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds`);
 
