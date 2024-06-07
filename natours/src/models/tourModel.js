@@ -99,7 +99,13 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
-    guides: [{ type: mongoose.Schema.ObjectId, ref: "User" }], //? modelling tour guides using referencing
+    guides: [
+      //? modelling tour guides using referencing
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -110,6 +116,13 @@ const tourSchema = new mongoose.Schema(
 //? creates a property on a tour object that only exists in the response, not in the database
 tourSchema.virtual("durationWeeks").get(function () {
   return this.duration / 7;
+});
+
+//* virtual populate
+tourSchema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "tour",
 });
 
 //* pre-save hook: middleware that runs before a "save" or "create" but not "insertMany" event (document is saved to database)
