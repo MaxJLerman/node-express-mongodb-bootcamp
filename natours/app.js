@@ -5,11 +5,12 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const hpp = require("hpp");
 
+const xss = require("./src/utils/xssClean");
 const AppError = require("./src/utils/appError");
 const globalErrorHandler = require("./src/controllers/errorController");
 const tourRouter = require("./src/routes/tourRoutes");
 const userRouter = require("./src/routes/userRoutes");
-const xss = require("./src/utils/xssClean");
+const reviewRouter = require("./src/routes/reviewRoutes");
 
 const app = express();
 
@@ -58,6 +59,7 @@ app.use((request, response, next) => {
 
 app.use("/api/v1/tours", tourRouter); //* using middleware function created in another file
 app.use("/api/v1/users", userRouter); //* now created a sub application (router system) for "tours" resource
+app.use("/api/v1/reviews", reviewRouter);
 
 app.all("*", (request, response, next) => {
   next(new AppError(`Can't find ${request.originalUrl} on the server`, 404));
