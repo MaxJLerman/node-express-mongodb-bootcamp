@@ -2,11 +2,13 @@ const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
+const mongoSanitize = require("express-mongo-sanitize");
 
 const AppError = require("./src/utils/appError");
 const globalErrorHandler = require("./src/controllers/errorController");
 const tourRouter = require("./src/routes/tourRoutes");
 const userRouter = require("./src/routes/userRoutes");
+const xss = require("./src/utils/xssClean");
 
 const app = express();
 
@@ -26,6 +28,11 @@ const limiter = rateLimit({
 app.use("/api", limiter); //* middleware function only affects routes at /api, limits requests from same IP
 
 app.use(express.json({ limit: "10kb" })); //? body parser, reads data from body into request.body
+
+app.use(mongoSanitize()); //? data sanitisation against NoSQL Query Injection
+
+app.use(xss()); //? data sanitisation against Cross Site Scripting (XSS)
+
 app.use(express.static(`${__dirname}/public`)); //? serving static files
 
 app.use((request, response, next) => {

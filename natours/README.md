@@ -368,3 +368,27 @@ natours-test> db.tours.find()     <------- returns nothing
 - Define the email options: from, to, subject and message body, potentially even HTML.
 
 - Send the email.
+
+## Data Sanitisation
+
+The packages `express-mongo-sanitise` and `xss-clean` are used for NoSQL Query Injection and Cross Site Scripting respectively.
+
+The former prevents attacks such as the following, which aims to login to an account with just a password:
+
+```
+{
+  "email": { "$gt": "" },
+  password: "password"
+}
+```
+
+Whereas the latter prevents attacks such as
+
+```
+{
+  "name": "<div id='bad-code'>Name</div>",
+  "email": "tester@email.com",
+  "password": "Admin@123",
+  "confirmPassword": "Admin@123"
+}
+```
