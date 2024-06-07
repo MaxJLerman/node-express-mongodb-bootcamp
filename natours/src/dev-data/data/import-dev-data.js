@@ -11,17 +11,15 @@ const database = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD,
 );
 mongoose.connect(database).then(() => {
-  console.log("database connection successful");
+  console.log("Database connection successful.");
 });
 
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, "utf-8"),
-);
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, "utf-8"));
 
 const importData = async () => {
   try {
     await Tour.create(tours);
-    console.log("Data successfully loaded");
+    console.log("Data successfully loaded.");
   } catch (error) {
     console.log(error);
   }
@@ -31,7 +29,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await Tour.deleteMany();
-    console.log("Data successfully deleted");
+    console.log("Data successfully deleted.");
   } catch (error) {
     console.log(error);
   }

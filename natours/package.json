@@ -7,8 +7,8 @@
     "start": "nodemon server.js",
     "start:production": "NODE_ENV=production nodemon server.js",
     "start:production-windows": "SET NODE_ENV=production & nodemon server.js",
-    "data:import": "node dev-data/data/import-dev-data.js --import",
-    "data:delete": "node dev-data/data/import-dev-data.js --delete",
+    "data:import": "node src/dev-data/data/import-dev-data.js --import",
+    "data:delete": "node src/dev-data/data/import-dev-data.js --delete",
     "debug": "ndb server.js"
   },
   "author": "",

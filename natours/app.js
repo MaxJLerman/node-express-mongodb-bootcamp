@@ -57,8 +57,7 @@ app.use((request, response, next) => {
 });
 
 app.use("/api/v1/tours", tourRouter); //* using middleware function created in another file
-//* now created a sub application (router system) for "tours" resource
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1/users", userRouter); //* now created a sub application (router system) for "tours" resource
 
 app.all("*", (request, response, next) => {
   next(new AppError(`Can't find ${request.originalUrl} on the server`, 404));

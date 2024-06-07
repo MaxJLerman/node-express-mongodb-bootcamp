@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
-// const validator = require("validator");
 
 const tourSchema = new mongoose.Schema(
   {
@@ -11,10 +10,6 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       maxlength: [40, "A tour must have less than or equal to 40 characters"],
       minlength: [10, "A tour must have more than or equal to 10 characters"],
-      // validate: [
-      //   validator.isAlpha,
-      //   "A tour name must only contaionally contain alpha characters",
-      // ],
     },
     slug: String,
     duration: {
@@ -81,6 +76,29 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      type: {
+        type: String,
+        default: "Point",
+        enum: ["Point"],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: "Point",
+          enum: ["Point"],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -108,7 +126,9 @@ tourSchema.pre("save", function (next) {
 
 //* post-save hook: middleware that runs after a "save" or "create" but not "insertMany" event
 tourSchema.post("save", function (document, next) {
-  console.log(document);
+  if (process.env.NODE_ENV === "development") {
+    console.log(document);
+  }
 
   next();
 });
