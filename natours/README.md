@@ -382,13 +382,14 @@ The former prevents attacks such as the following, which aims to login to an acc
 }
 ```
 
-Whereas the latter prevents attacks such as
+Whereas the latter prevents attacks in the form of this:
 
 ```
-{
-  "name": "<div id='bad-code'>Name</div>",
-  "email": "tester@email.com",
-  "password": "Admin@123",
-  "confirmPassword": "Admin@123"
-}
+  "name": "<div id='bad-code'>Name</div>"
+```
+
+Due to the [recreated](https://github.com/MaxJLerman/node-express-mongodb-bootcamp/blob/main/natours/src/lib/xss.js) package changing the entered data into this output:
+
+```
+"name": "&lt;div id='bad-code'>Name&lt;/div>",
 ```
