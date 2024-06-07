@@ -393,3 +393,9 @@ Due to the [recreated](https://github.com/MaxJLerman/node-express-mongodb-bootca
 ```
 "name": "&lt;div id='bad-code'>Name&lt;/div>",
 ```
+
+## HTTP Parameter Pollution
+
+By querying the URL: `{{API}}/api/v1/tours?sort=duration&sort=price`, the _sort_ parameter is set twice, leading the application to output an error as it's trying to sort by ["duration", "price"]. Instead, using the package _hpp_ it cleans the request parameters and only sorts by the last one.
+
+This behavior is not always needed, e.g. cases like price of 5 **and** 9, therefore a parameter whitelist is required.
