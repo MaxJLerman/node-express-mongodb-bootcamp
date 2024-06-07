@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
 const AppError = require("./src/utils/appError");
 const globalErrorHandler = require("./src/controllers/errorController");
@@ -9,8 +10,12 @@ const userRouter = require("./src/routes/userRoutes");
 
 const app = express();
 
+//? middleware functions == in the middle of the request & response, gives us access to props on request parameter
+
+app.use(helmet()); //* middleware function that helps secure Express apps by setting various HTTP headers
+
 if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
+  app.use(morgan("dev")); //* middleware function for dev logging
 }
 
 const limiter = rateLimit({
@@ -18,10 +23,10 @@ const limiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   message: "Too many requests from this IP, please try again in an hour.",
 });
-app.use("/api", limiter); //* middleware function only affects routes at /api
+app.use("/api", limiter); //* middleware function only affects routes at /api, limits requests from same IP
 
-app.use(express.json()); //* middleware, in the middle of the request & response, gives us access to props on req parameter
-app.use(express.static(`${__dirname}/public`));
+app.use(express.json({ limit: "10kb" })); //? body parser, reads data from body into request.body
+app.use(express.static(`${__dirname}/public`)); //? serving static files
 
 app.use((request, response, next) => {
   request.requestTime = new Date().toISOString();
