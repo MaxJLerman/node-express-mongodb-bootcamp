@@ -6,7 +6,9 @@ const authController = require("../controllers/authController");
 const { getAllReviews, createReview } = reviewController;
 const { protect, restrictTo } = authController;
 
-const router = express.Router();
+const router = express.Router({
+  mergeParams: true, //? allows us to use the :tourId parameter (coming from the tourRouter) in the reviewRouter
+});
 
 router
   .route("/")

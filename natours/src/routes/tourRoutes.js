@@ -2,7 +2,7 @@ const express = require("express");
 
 const tourController = require("../controllers/tourController");
 const authController = require("../controllers/authController");
-const reviewController = require("../controllers/reviewController");
+const reviewRouter = require("../routes/reviewRoutes");
 
 const {
   aliasTopTours,
@@ -15,9 +15,10 @@ const {
   getMonthlyPlan,
 } = tourController;
 const { protect, restrictTo } = authController;
-const { createReview } = reviewController;
 
 const router = express.Router(); //* middleware function created
+
+router.use("/:tourId/reviews", reviewRouter); //? for this specific route, use reviewRouter instead of tourRouter
 
 router.route("/top-5-cheap").get(aliasTopTours, getAllTours);
 
@@ -34,9 +35,5 @@ router
   .get(getOneTour)
   .patch(updateTour)
   .delete(protect, restrictTo("admin", "lead-guide"), deleteTour);
-
-router
-  .route("/:tourId/reviews")
-  .post(protect, restrictTo("user"), createReview);
 
 module.exports = router;
