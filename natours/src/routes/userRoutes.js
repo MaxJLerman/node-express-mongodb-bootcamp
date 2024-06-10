@@ -7,6 +7,7 @@ const {
   getAllUsers,
   updateCurrentUser,
   deleteCurrentUser,
+  getCurrentUser,
   getOneUser,
   createUser,
   updateUser,
@@ -28,6 +29,7 @@ router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
 router.patch("/reset-password/:token", resetPassword);
 router.patch("/update-password", protect, updatePassword);
+router.get("/current-user", protect, getCurrentUser, getOneUser);
 router.patch("/update-current-user", protect, updateCurrentUser);
 router.delete("/delete-current-user", protect, deleteCurrentUser);
 

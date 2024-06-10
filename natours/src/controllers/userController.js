@@ -16,6 +16,12 @@ const filterObject = (object, ...allowedFields) => {
   return newObject;
 };
 
+exports.getCurrentUser = (request, response, next) => {
+  request.params.id = request.user.id;
+
+  next();
+};
+
 exports.updateCurrentUser = catchAsync(async (request, response, next) => {
   //* create error if user POSTs password data
   if (request.body.password || request.body.confirmPassword) {
@@ -57,8 +63,6 @@ exports.deleteCurrentUser = catchAsync(async (request, response, next) => {
   });
 });
 
-exports.getOneUser = factory.getOne(User);
-
 exports.createUser = (request, response) => {
   response.status(500).json({
     status: "error",
@@ -67,5 +71,6 @@ exports.createUser = (request, response) => {
 };
 
 exports.getAllUsers = factory.getAll(User);
+exports.getOneUser = factory.getOne(User);
 exports.updateUser = factory.updateOne(User); //! DO NOT UPDATE PASSWORDS WITH THIS
 exports.deleteUser = factory.deleteOne(User);
