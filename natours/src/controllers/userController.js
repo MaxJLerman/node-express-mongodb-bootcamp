@@ -83,11 +83,5 @@ exports.createUser = (request, response) => {
   });
 };
 
-exports.updateUser = (request, response) => {
-  response.status(500).json({
-    status: "error",
-    message: "route not yet defined",
-  });
-};
-
+exports.updateUser = factory.updateOne(User); //! DO NOT UPDATE PASSWORDS WITH THIS
 exports.deleteUser = factory.deleteOne(User);

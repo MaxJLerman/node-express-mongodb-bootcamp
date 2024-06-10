@@ -3,7 +3,13 @@ const express = require("express");
 const reviewController = require("../controllers/reviewController");
 const authController = require("../controllers/authController");
 
-const { getAllReviews, createReview, deleteReview } = reviewController;
+const {
+  getAllReviews,
+  setTourUserId,
+  createReview,
+  updateReview,
+  deleteReview,
+} = reviewController;
 const { protect, restrictTo } = authController;
 
 const router = express.Router({
@@ -13,8 +19,8 @@ const router = express.Router({
 router
   .route("/")
   .get(getAllReviews)
-  .post(protect, restrictTo("user"), createReview);
+  .post(protect, restrictTo("user"), setTourUserId, createReview);
 
-router.route("/:id").delete(deleteReview);
+router.route("/:id").patch(updateReview).delete(deleteReview);
 
 module.exports = router;
