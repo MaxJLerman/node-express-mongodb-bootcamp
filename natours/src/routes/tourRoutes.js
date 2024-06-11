@@ -24,16 +24,21 @@ router.route("/top-5-cheap").get(aliasTopTours, getAllTours);
 
 router.route("/tour-statistics").get(getTourStatistics);
 
-router.route("/monthly-plan/:year").get(getMonthlyPlan);
+router
+  .route("/monthly-plan/:year")
+  .get(protect, restrictTo("admin", "lead-guide", "guide"), getMonthlyPlan);
 
 //* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
-router.route("/").get(protect, getAllTours).post(createTour);
+router
+  .route("/")
+  .get(getAllTours)
+  .post(protect, restrictTo("admin", "lead-guide"), createTour);
 
 //* rest of the headers do need an id parameter, so can be chained together like so:
 router
   .route("/:id")
   .get(getOneTour)
-  .patch(updateTour)
+  .patch(protect, restrictTo("admin", "lead-guide"), updateTour)
   .delete(protect, restrictTo("admin", "lead-guide"), deleteTour);
 
 module.exports = router;

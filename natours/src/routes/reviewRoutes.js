@@ -17,11 +17,17 @@ const router = express.Router({
   mergeParams: true, //? allows us to use the :tourId parameter (coming from the tourRouter) in the reviewRouter
 });
 
+router.use(protect);
+
 router
   .route("/")
   .get(getAllReviews)
-  .post(protect, restrictTo("user"), setTourUserId, createReview);
+  .post(restrictTo("user"), setTourUserId, createReview);
 
-router.route("/:id").get(getOneReview).patch(updateReview).delete(deleteReview);
+router
+  .route("/:id")
+  .get(getOneReview)
+  .patch(restrictTo("user", "admin"), updateReview)
+  .delete(restrictTo("user", "admin"), deleteReview);
 
 module.exports = router;
