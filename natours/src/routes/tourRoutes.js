@@ -14,6 +14,7 @@ const {
   getTourStatistics,
   getMonthlyPlan,
   getToursWithin,
+  getDistances,
 } = tourController;
 const { protect, restrictTo } = authController;
 
@@ -32,6 +33,8 @@ router
 router
   .route("/tours-within/:distance/center/:latitudelongitude/unit/:unit")
   .get(getToursWithin);
+
+router.route("/distances/:latitudelongitude/unit/:unit").get(getDistances);
 
 //* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
 router

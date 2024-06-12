@@ -96,6 +96,10 @@ exports.getToursWithin = catchAsync(async (request, response, next) => {
   const { distance, latitudelongitude, unit } = request.params;
   const [latitude, longitude] = latitudelongitude.split(",");
 
+  unit !== "mi" && unit !== "km"
+    ? next(new AppError("Unit must either be miles (mi) or kilometers (km)"))
+    : null;
+
   //? radius in radians
   const radius = unit === "mi" ? distance / 3963.2 : distance / 6378.1;
 
@@ -119,6 +123,54 @@ exports.getToursWithin = catchAsync(async (request, response, next) => {
     results: tours.length,
     data: {
       data: tours,
+    },
+  });
+});
+
+exports.getDistances = catchAsync(async (request, response, next) => {
+  const { latitudelongitude, unit } = request.params;
+  const [latitude, longitude] = latitudelongitude.split(",");
+
+  unit !== "mi" && unit !== "km"
+    ? next(new AppError("Unit must either be miles (mi) or kilometers (km)"))
+    : null;
+
+  const multiplier = unit === "mi" ? 0.000621371 : 0.001; //? converts from default meters to miles/kilometers
+
+  if (!latitude || !longitude) {
+    next(
+      new AppError(
+        "Provide latitude and longitude in the format: latitude,longitude",
+        400,
+      ),
+    );
+  }
+
+  //* performing calculation, use aggregation pipeline (middleware)
+  const distances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: "Point",
+          coordinates: [longitude * 1, latitude * 1],
+        },
+        distanceField: "distance",
+        distanceMultiplier: multiplier,
+      },
+    },
+    {
+      $project: {
+        //? only display the following fields in the response
+        distance: 1,
+        name: 1,
+      },
+    },
+  ]);
+
+  response.status(200).json({
+    status: "success",
+    data: {
+      data: distances,
     },
   });
 });
