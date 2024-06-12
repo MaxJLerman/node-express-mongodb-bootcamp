@@ -157,7 +157,7 @@ tourSchema.pre("save", function (next) {
 //* post-save hook: middleware that runs after a "save" or "create" but not "insertMany" event
 tourSchema.post("save", function (document, next) {
   if (process.env.NODE_ENV === "development") {
-    console.log(document);
+    // console.log(document);
   }
 
   next();
