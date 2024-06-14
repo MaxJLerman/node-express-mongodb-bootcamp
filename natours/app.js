@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
@@ -14,7 +15,12 @@ const reviewRouter = require("./src/routes/reviewRoutes");
 
 const app = express();
 
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "src/views"));
+
 //? middleware functions == in the middle of the request & response, gives us access to props on request parameter
+
+app.use(express.static(path.join(__dirname, "public"))); //? serving static files
 
 app.use(helmet()); //* middleware function that helps secure Express apps by setting various HTTP headers
 
@@ -49,12 +55,14 @@ app.use(
   }),
 );
 
-app.use(express.static(`${__dirname}/public`)); //? serving static files
-
 app.use((request, response, next) => {
   request.requestTime = new Date().toISOString();
 
   next();
+});
+
+app.get("/", (request, response) => {
+  response.status(200).render("base");
 });
 
 app.use("/api/v1/tours", tourRouter); //* using middleware function created in another file
