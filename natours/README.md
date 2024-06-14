@@ -4,6 +4,8 @@ This README includes how to run MongoDB Shell & MongoDB Server for a local datab
 
 I use Git Bash for my terminal, so if you use another one some commands may differ.
 
+To view the API documentation, click [here](). I used [Postman](https://www.postman.com/) ~~purely for the automatic documentation generation~~ for my API testing but you're welcome to use whatever you like...perhaps _[Insomnia](https://insomnia.rest/)_.
+
 ## Installing MongoDB Shell & Server
 
 Install MongoDB Shell from [here](https://www.mongodb.com/try/download/shell).

@@ -40,6 +40,7 @@ const reviewSchema = new mongoose.Schema(
 //? should reject POSTing >1 review with same tour & user IDs
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 //TODO: try POSTing reviews with same user on 1 tour tomorrow, shouldn't be able to
+//TODO: fix later, didn't work after 1 day like the course man said (╯°□°)╯︵ ┻━┻
 
 reviewSchema.pre(/^find/, function (next) {
   this.populate({

@@ -1,0 +1,2129 @@
+{
+	"info": {
+		"_postman_id": "fba9b621-3e7c-4c06-a0f1-dc8c8ffcb361",
+		"name": "Natours",
+		"description": "The Natours API contains endpoints for Tours, Users, and Reviews.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34981211"
+	},
+	"item": [
+		{
+			"name": "Tours",
+			"item": [
+				{
+					"name": "Get all tours",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code is 200', function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"})",
+									"",
+									"pm.test('Response has the required fields', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('status');",
+									"    pm.expect(responseData).to.have.property('requestedAt');",
+									"    pm.expect(responseData).to.have.property('results');",
+									"    pm.expect(responseData).to.have.property('data');",
+									"    pm.expect(responseData.data).to.have.property('data').that.is.an('array').and.not.empty;",
+									"    pm.expect(responseData.data.data[0]).to.have.property('startLocation').that.is.an('object');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('_id');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('name');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('duration');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('maxGroupSize');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('difficulty');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('ratingsAverage');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('ratingsQuantity');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('price');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('summary');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('description');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('imageCover');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('images').that.is.an('array');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('startDates').that.is.an('array');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('secretTour');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('locations').that.is.an('array').and.not.empty;",
+									"    pm.expect(responseData.data.data[0].locations[0]).to.have.property('type');",
+									"    pm.expect(responseData.data.data[0].locations[0]).to.have.property('coordinates').that.is.an('array').and.not.empty;",
+									"    pm.expect(responseData.data.data[0].locations[0]).to.have.property('description');",
+									"    pm.expect(responseData.data.data[0].locations[0]).to.have.property('day');",
+									"    pm.expect(responseData.data.data[0].locations[0]).to.have.property('_id');",
+									"    pm.expect(responseData.data.data[0].locations[0]).to.have.property('id');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('guides').that.is.an('array').and.not.empty;",
+									"    pm.expect(responseData.data.data[0].guides[0]).to.have.property('_id');",
+									"    pm.expect(responseData.data.data[0].guides[0]).to.have.property('name');",
+									"    pm.expect(responseData.data.data[0].guides[0]).to.have.property('email');",
+									"    pm.expect(responseData.data.data[0].guides[0]).to.have.property('photo');",
+									"    pm.expect(responseData.data.data[0].guides[0]).to.have.property('role');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('slug');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('durationWeeks');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('id');",
+									"})",
+									"",
+									"pm.test('StartLocation object should have required properties', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.data.data).to.be.an('array').that.is.not.empty;",
+									"    responseData.data.data.forEach(tour => {",
+									"        pm.expect(tour.startLocation).to.be.an('object');",
+									"        pm.expect(tour.startLocation.type).to.exist.and.to.be.a('string');",
+									"        pm.expect(tour.startLocation.coordinates).to.exist.and.to.be.an('array').that.is.not.empty;",
+									"        pm.expect(tour.startLocation.address).to.exist.and.to.be.a('string');",
+									"        pm.expect(tour.startLocation.description).to.exist.and.to.be.a('string');",
+									"    });",
+									"})",
+									"",
+									"pm.test('Data array is present and contains the expected number of elements', function () {",
+									"    const responseData = pm.response.json().data;",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.exist.and.to.be.an('array');",
+									"    pm.expect(responseData.data).to.have.length.above(1);",
+									"})",
+									"",
+									"pm.test('All required properties are present in the response', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data.data).to.be.an('array').and.not.empty;",
+									"    responseData.data.data.forEach(tour => {",
+									"        pm.expect(tour).to.have.property('name');",
+									"        pm.expect(tour).to.have.property('duration');",
+									"        pm.expect(tour).to.have.property('maxGroupSize');",
+									"        pm.expect(tour).to.have.property('difficulty');",
+									"        pm.expect(tour).to.have.property('price');",
+									"        pm.expect(tour).to.have.property('summary');",
+									"        pm.expect(tour).to.have.property('description');",
+									"        pm.expect(tour).to.have.property('imageCover');",
+									"        pm.expect(tour).to.have.property('images');",
+									"        pm.expect(tour).to.have.property('startDates');",
+									"        pm.expect(tour).to.have.property('secretTour');",
+									"        pm.expect(tour).to.have.property('locations');",
+									"        pm.expect(tour).to.have.property('guides');",
+									"        pm.expect(tour).to.have.property('slug');",
+									"        pm.expect(tour).to.have.property('durationWeeks');",
+									"        pm.expect(tour).to.have.property('id');",
+									"    });",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NWYzNjc2ZmQwYjg5ZWZlNGJiMDQyYSIsImlhdCI6MTcxNzUxNTg5NCwiZXhwIjoxNzE4MTIwNjk0fQ.PJpqybtev_4ok5JqzEEzMLcfw2Z6Zfg3zRoO67MFkGI"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours"
+							]
+						},
+						"description": "\nThe endpoint retrieves a list of tours available. The response is in JSON format and has the following schema:\n\n```json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"status\": {\"type\": \"string\"},\n        \"requestedAt\": {\"type\": \"string\"},\n        \"results\": {\"type\": \"integer\"},\n        \"data\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"data\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"type\": \"object\",\n                        \"properties\": {\n                            \"startLocation\": {\n                                \"type\": \"object\",\n                                \"properties\": {\n                                    \"type\": {\"type\": \"string\"},\n                                    \"coordinates\": {\n                                        \"type\": \"array\",\n                                        \"items\": {\"type\": \"number\"}\n                                    },\n                                    \"address\": {\"type\": \"string\"},\n                                    \"description\": {\"type\": \"string\"}\n                                }\n                            },\n                            \"_id\": {\"type\": \"string\"},\n                            \"name\": {\"type\": \"string\"},\n                            \"duration\": {\"type\": \"integer\"},\n                            \"maxGroupSize\": {\"type\": \"integer\"},\n                            \"difficulty\": {\"type\": \"string\"},\n                            \"ratingsAverage\": {\"type\": \"number\"},\n                            \"ratingsQuantity\": {\"type\": \"integer\"},\n                            \"price\": {\"type\": \"number\"},\n                            \"summary\": {\"type\": \"string\"},\n                            \"description\": {\"type\": \"string\"},\n                            \"imageCover\": {\"type\": \"string\"},\n                            \"images\": {\n                                \"type\": \"array\",\n                                \"items\": {\"type\": \"string\"}\n                            },\n                            \"startDates\": {\n                                \"type\": \"array\",\n                                \"items\": {\"type\": \"string\"}\n                            },\n                            \"secretTour\": {\"type\": \"boolean\"},\n                            \"locations\": {\n                                \"type\": \"array\",\n                                \"items\": {\n                                    \"type\": \"object\",\n                                    \"properties\": {\n                                        \"type\": {\"type\": \"string\"},\n                                        \"coordinates\": {\n                                            \"type\": \"array\",\n                                            \"items\": {\"type\": \"number\"}\n                                        },\n                                        \"description\": {\"type\": \"string\"},\n                                        \"day\": {\"type\": \"integer\"},\n                                        \"_id\": {\"type\": \"string\"},\n                                        \"id\": {\"type\": \"string\"}\n                                    }\n                                }\n                            },\n                            \"guides\": {\n                                \"type\": \"array\",\n                                \"items\": {\n                                    \"type\": \"object\",\n                                    \"properties\": {\n                                        \"_id\": {\"type\": \"string\"},\n                                        \"name\": {\"type\": \"string\"},\n                                        \"email\": {\"type\": \"string\"},\n                                        \"photo\": {\"type\": \"string\"},\n                                        \"role\": {\"type\": \"string\"}\n                                    }\n                                }\n                            },\n                            \"slug\": {\"type\": \"string\"},\n                            \"durationWeeks\": {\"type\": \"integer\"},\n                            \"id\": {\"type\": \"string\"}\n                        }\n                    }\n                }\n            }\n        }\n    }\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Get tour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json().data.data;",
+									"    ",
+									"    const requiredFields = [",
+									"        \"name\", ",
+									"        \"duration\", ",
+									"        \"maxGroupSize\", ",
+									"        \"difficulty\", ",
+									"        \"ratingsAverage\", ",
+									"        \"ratingsQuantity\", ",
+									"        \"price\", ",
+									"        \"summary\", ",
+									"        \"description\", ",
+									"        \"imageCover\", ",
+									"        \"images\", ",
+									"        \"startDates\", ",
+									"        \"locations\", ",
+									"        \"guides\", ",
+									"        \"slug\", ",
+									"        \"durationWeeks\",",
+									"        \"reviews\",",
+									"        \"id\"",
+									"    ];",
+									"",
+									"    requiredFields.forEach(field => {",
+									"        pm.expect(responseData).to.have.property(field);",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the startLocation object and its properties\", function () {",
+									"    const responseData = pm.response.json().data;",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.be.an('object');",
+									"    pm.expect(responseData.data.startLocation).to.be.an('object');",
+									"    pm.expect(responseData.data.startLocation.type).to.be.a('string');",
+									"    pm.expect(responseData.data.startLocation.coordinates).to.be.an('array');",
+									"    pm.expect(responseData.data.startLocation.address).to.be.a('string');",
+									"    pm.expect(responseData.data.startLocation.description).to.be.a('string');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Locations array is present and has expected number of elements\", function () {",
+									"    const responseData = pm.response.json();",
+									"    const expectedNumberOfElements = responseData.data.data.locations.length;",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data.data.locations).to.exist;",
+									"    pm.expect(responseData.data.data.locations).to.be.an('array');",
+									"    pm.expect(responseData.data.data.locations).to.have.lengthOf(expectedNumberOfElements);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Guides array is present and contains the expected number\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data.data.guides).to.exist.and.to.be.an('array');",
+									"    pm.expect(responseData.data.data.guides).to.have.lengthOf(2);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/5c88fa8cf4afda39709c2955",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"5c88fa8cf4afda39709c2955"
+							]
+						},
+						"description": "\nThe endpoint makes an HTTP GET request to retrieve information about a specific tour. The response is a JSON object with a 200 status code and Content-Type as application/json. Below is the JSON schema representing the response:\n\n```json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"status\": { \"type\": \"string\" },\n    \"data\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"data\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"startLocation\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"type\": { \"type\": \"string\" },\n                \"coordinates\": { \"type\": \"array\" },\n                \"address\": { \"type\": \"string\" },\n                \"description\": { \"type\": \"string\" }\n              }\n            },\n            \"_id\": { \"type\": \"string\" },\n            \"name\": { \"type\": \"string\" },\n            \"duration\": { \"type\": \"number\" },\n            \"maxGroupSize\": { \"type\": \"number\" },\n            \"difficulty\": { \"type\": \"string\" },\n            \"ratingsAverage\": { \"type\": \"number\" },\n            \"ratingsQuantity\": { \"type\": \"number\" },\n            \"price\": { \"type\": \"number\" },\n            \"summary\": { \"type\": \"string\" },\n            \"description\": { \"type\": \"string\" },\n            \"imageCover\": { \"type\": \"string\" },\n            \"images\": { \"type\": \"array\" },\n            \"startDates\": { \"type\": \"array\" },\n            \"secretTour\": { \"type\": \"boolean\" },\n            \"locations\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"type\": { \"type\": \"string\" },\n                  \"coordinates\": { \"type\": \"array\" },\n                  \"description\": { \"type\": \"string\" },\n                  \"day\": { \"type\": \"number\" },\n                  \"_id\": { \"type\": \"string\" },\n                  \"id\": { \"type\": \"string\" }\n                }\n              }\n            },\n            \"guides\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"_id\": { \"type\": \"string\" },\n                  \"name\": { \"type\": \"string\" },\n                  \"email\": { \"type\": \"string\" },\n                  \"photo\": { \"type\": \"string\" },\n                  \"role\": { \"type\": \"string\" }\n                }\n              }\n            },\n            \"slug\": { \"type\": \"string\" },\n            \"__v\": { \"type\": \"number\" },\n            \"durationWeeks\": { \"type\": \"number\" },\n            \"reviews\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"_id\": { \"type\": \"string\" },\n                  \"review\": { \"type\": \"string\" },\n                  \"rating\": { \"type\": \"number\" },\n                  \"createdAt\": { \"type\": \"string\" },\n                  \"tour\": { \"type\": \"string\" },\n                  \"user\": { \"type\": \"null\" },\n                  \"__v\": { \"type\": \"number\" },\n                  \"id\": { \"type\": \"string\" }\n                }\n              }\n            },\n            \"id\": { \"type\": \"string\" }\n          }\n        }\n      }\n    }\n  }\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Create new tour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Data object is present in the response\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('data');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"startLocation\": {\r\n        \"type\": \"Point\",\r\n        \"coordinates\": [\r\n            -80.185942,\r\n            25.774772\r\n        ],\r\n        \"address\": \"301 Biscayne Blvd, Miami, FL 33132, USA\",\r\n        \"description\": \"Miami, USA\"\r\n    },\r\n    \"name\": \"The Sea Explorer BUT BETTER 4\",\r\n    \"duration\": 7,\r\n    \"maxGroupSize\": 15,\r\n    \"difficulty\": \"medium\",\r\n    \"ratingsAverage\": 4.7,\r\n    \"ratingsQuantity\": 12,\r\n    \"price\": 497,\r\n    \"summary\": \"Exploring the jaw-dropping US east coast by foot and by boat\",\r\n    \"description\": \"Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\nIrure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\",\r\n    \"imageCover\": \"tour-2-cover.jpg\",\r\n    \"images\": [\r\n        \"tour-2-1.jpg\",\r\n        \"tour-2-2.jpg\",\r\n        \"tour-2-3.jpg\"\r\n    ],\r\n    \"startDates\": [\r\n        \"2021-06-19T09:00:00.000Z\",\r\n        \"2021-07-20T09:00:00.000Z\",\r\n        \"2021-08-18T09:00:00.000Z\"\r\n    ],\r\n    \"secretTour\": false,\r\n    \"locations\": [\r\n        {\r\n            \"type\": \"Point\",\r\n            \"coordinates\": [\r\n                -80.128473,\r\n                25.781842\r\n            ],\r\n            \"description\": \"Lummus Park Beach\",\r\n            \"day\": 1,\r\n            \"_id\": \"5c88fa8cf4afda39709c2959\",\r\n            \"id\": \"5c88fa8cf4afda39709c2959\"\r\n        },\r\n        {\r\n            \"type\": \"Point\",\r\n            \"coordinates\": [\r\n                -80.647885,\r\n                24.909047\r\n            ],\r\n            \"description\": \"Islamorada\",\r\n            \"day\": 2,\r\n            \"_id\": \"5c88fa8cf4afda39709c2958\",\r\n            \"id\": \"5c88fa8cf4afda39709c2958\"\r\n        },\r\n        {\r\n            \"type\": \"Point\",\r\n            \"coordinates\": [\r\n                -81.0784,\r\n                24.707496\r\n            ],\r\n            \"description\": \"Sombrero Beach\",\r\n            \"day\": 3,\r\n            \"_id\": \"5c88fa8cf4afda39709c2957\",\r\n            \"id\": \"5c88fa8cf4afda39709c2957\"\r\n        },\r\n        {\r\n            \"type\": \"Point\",\r\n            \"coordinates\": [\r\n                -81.768719,\r\n                24.552242\r\n            ],\r\n            \"description\": \"West Key\",\r\n            \"day\": 5,\r\n            \"_id\": \"5c88fa8cf4afda39709c2956\",\r\n            \"id\": \"5c88fa8cf4afda39709c2956\"\r\n        }\r\n    ],\r\n    \"guides\": [\r\n        {\r\n            \"_id\": \"5c8a22c62f8fb814b56fa18b\",\r\n            \"name\": \"Miyah Myles\",\r\n            \"email\": \"miyah@example.com\",\r\n            \"photo\": \"user-12.jpg\",\r\n            \"role\": \"lead-guide\"\r\n        },\r\n        {\r\n            \"_id\": \"5c8a1f4e2f8fb814b56fa185\",\r\n            \"name\": \"Jennifer Hardy\",\r\n            \"email\": \"jennifer@example.com\",\r\n            \"photo\": \"user-6.jpg\",\r\n            \"role\": \"guide\"\r\n        }\r\n    ],\r\n    \"slug\": \"the-sea-explorer\",\r\n    \"durationWeeks\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/tours",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours"
+							]
+						},
+						"description": "\n### Create a New Tour\n\nThis endpoint allows you to create a new tour.\n\n#### Request Body\n- `startLocation` (object)\n  - `type` (string)\n  - `coordinates` (array)\n  - `address` (string)\n  - `description` (string)\n- `name` (string)\n- `duration` (number)\n- `maxGroupSize` (number)\n- `difficulty` (string)\n- `ratingsAverage` (number)\n- `ratingsQuantity` (number)\n- `price` (number)\n- `summary` (string)\n- `description` (string)\n- `imageCover` (string)\n- `images` (array)\n- `startDates` (array)\n- `secretTour` (boolean)\n- `locations` (array of objects)\n  - `type` (string)\n  - `coordinates` (array)\n  - `description` (string)\n  - `day` (number)\n  - `_id` (string)\n  - `id` (string)\n- `guides` (array of objects)\n  - `_id` (string)\n  - `name` (string)\n  - `email` (string)\n  - `photo` (string)\n  - `role` (string)\n- `slug` (string)\n- `durationWeeks` (number)\n\n#### Response (201 - Created)\n```json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"status\": { \"type\": \"string\" },\n    \"data\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"data\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"name\": { \"type\": \"string\" },\n            \"slug\": { \"type\": \"string\" },\n            \"duration\": { \"type\": \"number\" },\n            \"maxGroupSize\": { \"type\": \"number\" },\n            \"difficulty\": { \"type\": \"string\" },\n            \"ratingsAverage\": { \"type\": \"number\" },\n            \"ratingsQuantity\": { \"type\": \"number\" },\n            \"price\": { \"type\": \"number\" },\n            \"summary\": { \"type\": \"string\" },\n            \"description\": { \"type\": \"string\" },\n            \"imageCover\": { \"type\": \"string\" },\n            \"images\": { \"type\": \"array\" },\n            \"createdAt\": { \"type\": \"string\" },\n            \"startDates\": { \"type\": \"array\" },\n            \"secretTour\": { \"type\": \"boolean\" },\n            \"startLocation\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"type\": { \"type\": \"string\" },\n                \"coordinates\": { \"type\": \"array\" },\n                \"address\": { \"type\": \"string\" },\n                \"description\": { \"type\": \"string\" }\n              }\n            },\n            \"locations\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"type\": { \"type\": \"string\" },\n                  \"coordinates\": { \"type\": \"array\" },\n                  \"description\": { \"type\": \"string\" },\n                  \"day\": { \"type\": \"number\" },\n                  \"_id\": { \"type\": \"string\" },\n                  \"id\": { \"type\": \"string\" }\n                }\n              }\n            },\n            \"guides\": { \"type\": \"array\" },\n            \"_id\": { \"type\": \"string\" },\n            \"__v\": { \"type\": \"number\" },\n            \"durationWeeks\": { \"type\": \"number\" },\n            \"id\": { \"type\": \"string\" }\n          }\n        }\n      }\n    }\n  }\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Update tour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body has the expected fields and data types\", function () {\r",
+									"    const responseData = pm.response.json().data.data;\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('name').that.is.a('string');\r",
+									"    pm.expect(responseData).to.have.property('duration').that.is.a('number');\r",
+									"    pm.expect(responseData).to.have.property('maxGroupSize').that.is.a('number');\r",
+									"    pm.expect(responseData).to.have.property('difficulty').that.is.a('string');\r",
+									"    pm.expect(responseData).to.have.property('ratingsAverage').that.is.a('number');\r",
+									"    pm.expect(responseData).to.have.property('ratingsQuantity').that.is.a('number');\r",
+									"    pm.expect(responseData).to.have.property('price').that.is.a('number');\r",
+									"    pm.expect(responseData).to.have.property('summary').that.is.a('string');\r",
+									"    pm.expect(responseData).to.have.property('description').that.is.a('string');\r",
+									"    pm.expect(responseData).to.have.property('imageCover').that.is.a('string');\r",
+									"    pm.expect(responseData).to.have.property('images').that.is.an('array');\r",
+									"    pm.expect(responseData).to.have.property('startLocation').that.is.an('object');\r",
+									"    pm.expect(responseData.startLocation).to.have.property('type').that.is.a('string');\r",
+									"    pm.expect(responseData.startLocation).to.have.property('coordinates').that.is.an('array');\r",
+									"    pm.expect(responseData).to.have.property('locations').that.is.an('array');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\": 498\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/5c88fa8cf4afda39709c2955",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"5c88fa8cf4afda39709c2955"
+							]
+						},
+						"description": "\n### Update Tour Details\nThis endpoint allows the user to update the details of a specific tour.\n\n#### Request Body\n- `price` (number, required): The updated price for the tour.\n\n#### Response\n- Status: 200 OK\n- Content-Type: application/json\n- `status` (string): The status of the response.\n- `data` (object): The updated tour details.\n  - `startLocation` (object): Details about the start location of the tour.\n    - `type` (string): The type of location.\n    - `coordinates` (array): The coordinates of the location.\n    - `address` (string): The address of the location.\n    - `description` (string): Description of the location.\n  - `_id` (string): The ID of the tour.\n  - `name` (string): The name of the tour.\n  - `duration` (number): The duration of the tour.\n  - `maxGroupSize` (number): The maximum group size for the tour.\n  - `difficulty` (string): The difficulty level of the tour.\n  - `ratingsAverage` (number): The average ratings for the tour.\n  - `ratingsQuantity` (number): The quantity of ratings received.\n  - `price` (number): The updated price of the tour.\n  - `summary` (string): The summary of the tour.\n  - `description` (string): The description of the tour.\n  - `imageCover` (string): The cover image of the tour.\n  - `images` (array): Array of images for the tour.\n  - `startDates` (array): Array of start dates for the tour.\n  - `secretTour` (boolean): Indicates if the tour is a secret tour.\n  - `locations` (array): Array of tour locations.\n    - `type` (string): The type of location.\n    - `coordinates` (array): The coordinates of the location.\n    - `description` (string): Description of the location.\n    - `day` (number): The day of the location.\n    - `_id` (string): The ID of the location.\n    - `id` (string): The ID of the location.\n  - `guides` (array): Array of guides for the tour.\n    - `_id` (string): The ID of the guide.\n    - `name` (string): The name of the guide.\n    - `email` (string): The email of the guide.\n    - `photo` (string): The photo of the guide.\n    - `role` (string): The role of the guide.\n  - `slug` (string): The slug of the tour.\n  - `__v` (number): Version key.\n  - `durationWeeks` (number): The duration of the tour in weeks.\n  - `id` (string): The ID of the tour.\n\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete tour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/666ad626f87b57044ea3c9c8",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"666ad626f87b57044ea3c9c8"
+							]
+						},
+						"description": "\n### DELETE /api/v1/tours/666ad626f87b57044ea3c9c8\n\nThis endpoint is used to delete a specific tour with the given ID.\n\n#### Request\nNo request body is required for this endpoint.\n\n- URL parameter:\n  - tourId: The unique identifier of the tour to be deleted.\n\n#### Response\n- Status: 204 No Content\n- Content-Type: text/xml\n\nThe response for this request does not include a body. Therefore, there is no JSON schema available for the response.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Get top 5 cheap tours",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the data object and its properties\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.exist.and.to.be.an('object');",
+									"    pm.expect(responseData.data.data).to.exist.and.to.be.an('array');",
+									"    responseData.data.data.forEach(function(tour) {",
+									"        pm.expect(tour).to.have.property('name');",
+									"        pm.expect(tour).to.have.property('duration');",
+									"        pm.expect(tour).to.have.property('maxGroupSize');",
+									"        pm.expect(tour).to.have.property('difficulty');",
+									"        pm.expect(tour).to.have.property('price');",
+									"        pm.expect(tour).to.have.property('summary');",
+									"        pm.expect(tour).to.have.property('description');",
+									"        pm.expect(tour).to.have.property('imageCover');",
+									"        pm.expect(tour).to.have.property('images');",
+									"        pm.expect(tour).to.have.property('startDates');",
+									"        pm.expect(tour).to.have.property('secretTour');",
+									"        pm.expect(tour).to.have.property('locations');",
+									"        pm.expect(tour).to.have.property('guides');",
+									"        pm.expect(tour).to.have.property('slug');",
+									"        pm.expect(tour).to.have.property('durationWeeks');",
+									"        pm.expect(tour).to.have.property('id');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Price is a non-negative number\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.be.an('object');",
+									"    pm.expect(responseData.data.data).to.be.an('array');",
+									"    ",
+									"    responseData.data.data.forEach(tour => {",
+									"        pm.expect(tour.price).to.be.a('number');",
+									"        pm.expect(tour.price).to.be.at.least(0);",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Locations array is present and contains the expected number of elements\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.have.property('data');",
+									"    pm.expect(responseData.data).to.have.property('data');",
+									"    pm.expect(responseData.data.data).to.be.an('array');",
+									"    pm.expect(responseData.data.data[0]).to.have.property('locations');",
+									"    pm.expect(responseData.data.data[0].locations).to.be.an('array');",
+									"    pm.expect(responseData.data.data[0].locations).to.have.lengthOf(1);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Guides array is present and contains expected number of elements\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.have.property('guides').that.is.an('array');",
+									"    pm.expect(responseData.data.guides.length).to.equal(1); // Replace 1 with the expected number of elements",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/top-5-cheap",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"top-5-cheap"
+							]
+						},
+						"description": "\nThis endpoint makes an HTTP GET request to retrieve the top 5 cheap tours. The response of this request is documented below as a JSON schema.\n\n```json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"status\": {\n      \"type\": \"string\"\n    },\n    \"results\": {\n      \"type\": \"integer\"\n    },\n    \"data\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\"\n          },\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"price\": {\n            \"type\": \"number\"\n          }\n          // ... (other properties)\n        }\n      }\n    }\n  }\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Get monthly plan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/monthly-plan/2021",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"monthly-plan",
+								"2021"
+							]
+						},
+						"description": "\n### Get Monthly Plan for 2021\nThis endpoint retrieves the monthly plan for the year 2021.\n\n#### Request\nNo request body is required for this endpoint. The URL should be appended with '/api/v1/tours/monthly-plan/2021' to retrieve the monthly plan for 2021.\n\n#### Response\nThe response will be a JSON object with the following schema:\n```json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"status\": {\n            \"type\": \"string\"\n        },\n        \"data\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"plan\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"type\": \"object\",\n                        \"properties\": {\n                            \"numberOfTourStarts\": {\n                                \"type\": \"integer\"\n                            },\n                            \"tours\": {\n                                \"type\": \"array\"\n                            },\n                            \"month\": {\n                                \"type\": \"integer\"\n                            }\n                        }\n                    }\n                }\n            }\n        }\n    }\n}\n```\nThe response will have a status code of 200 and a content type of 'application/json'. The 'data' object will contain an array of 'plan' objects, each representing the monthly plan with the number of tour starts, tours, and the month.\n\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Get tour statistics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - status and data\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('status');",
+									"    pm.expect(responseData).to.have.property('data');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the statistics object\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data).to.exist.and.to.be.an('object');",
+									"  pm.expect(responseData.data.statistics).to.exist.and.to.be.an('array');",
+									"  responseData.data.statistics.forEach(function(stat) {",
+									"    pm.expect(stat).to.be.an('object');",
+									"    pm.expect(stat._id).to.exist.and.to.be.a('string');",
+									"    pm.expect(stat.numberOfTours).to.exist.and.to.be.a('number');",
+									"    pm.expect(stat.numberOfRatings).to.exist.and.to.be.a('number');",
+									"    pm.expect(stat.averageRating).to.exist.and.to.be.a('number');",
+									"    pm.expect(stat.averagePrice).to.exist.and.to.be.a('number');",
+									"    pm.expect(stat.minimumPrice).to.exist.and.to.be.a('number');",
+									"    pm.expect(stat.maximumPrice).to.exist.and.to.be.a('number');",
+									"  });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Statistics array is present and contains expected number of elements\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data.statistics).to.exist.and.to.be.an('array');",
+									"    pm.expect(responseData.data.statistics).to.have.lengthOf(3);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate response properties\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.exist.and.to.be.an('object');",
+									"    pm.expect(responseData.data.statistics).to.exist.and.to.be.an('array');",
+									"",
+									"    responseData.data.statistics.forEach(stat => {",
+									"        pm.expect(stat).to.be.an('object');",
+									"        pm.expect(stat._id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"_id should be a non-empty string\");",
+									"        pm.expect(stat.numberOfTours).to.be.a('number').and.to.be.at.least(0, \"numberOfTours should be a non-negative integer\");",
+									"        pm.expect(stat.numberOfRatings).to.be.a('number').and.to.be.at.least(0, \"numberOfRatings should be a non-negative integer\");",
+									"        pm.expect(stat.averageRating).to.be.a('number').and.to.be.at.least(0, \"averageRating should be a non-negative integer\");",
+									"        pm.expect(stat.averagePrice).to.be.a('number').and.to.be.at.least(0, \"averagePrice should be a non-negative integer\");",
+									"        pm.expect(stat.minimumPrice).to.be.a('number').and.to.be.at.least(0, \"minimumPrice should be a non-negative integer\");",
+									"        pm.expect(stat.maximumPrice).to.be.a('number').and.to.be.at.least(0, \"maximumPrice should be a non-negative integer\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/tour-statistics",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"tour-statistics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get tours within radius",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json().data.data;",
+									"    const expectedKeys = ['startLocation', 'name', 'duration', 'maxGroupSize', ",
+									"        'difficulty', 'ratingsAverage', 'ratingsQuantity', 'price', ",
+									"        'summary', 'description', 'imageCover', 'images', 'startDates', ",
+									"        'secretTour', 'locations', 'guides', 'slug', 'durationWeeks', 'id'];",
+									"",
+									"    pm.expect(responseData).to.be.an('array');",
+									"",
+									"    console.log(responseData);",
+									"",
+									"    responseData.forEach((item) => {",
+									"        pm.expect(item).to.be.an(\"object\");",
+									"        pm.expect(item).to.include.all.keys(expectedKeys);",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"StartLocation coordinates are in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.have.property('data');",
+									"    pm.expect(responseData.data).to.have.property('data').that.is.an('array').and.not.empty;",
+									"    ",
+									"    responseData.data.data.forEach(tour => {",
+									"        pm.expect(tour).to.have.property('startLocation').that.is.an('object').and.not.empty;",
+									"        pm.expect(tour.startLocation).to.have.property('coordinates').that.is.an('array').and.has.lengthOf(2);",
+									"        pm.expect(tour.startLocation.coordinates[0]).to.be.a('number');",
+									"        pm.expect(tour.startLocation.coordinates[1]).to.be.a('number');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Locations coordinates are in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.data.data).to.be.an('array');",
+									"    responseData.data.data.forEach(tour => {",
+									"        pm.expect(tour.locations).to.be.an('array');",
+									"        tour.locations.forEach(location => {",
+									"            pm.expect(location.coordinates).to.be.an('array').that.has.lengthOf(2);",
+									"            pm.expect(location.coordinates[0]).to.be.a('number');",
+									"            pm.expect(location.coordinates[1]).to.be.a('number');",
+									"        });",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data array is present and has the expected number of elements\", function () {",
+									"    const responseData = pm.response.json().data;",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.exist.and.to.be.an('array');",
+									"    pm.expect(responseData.data).to.have.lengthOf(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/tours-within/200/center/34.111745,-118.113491/unit/mi",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"tours-within",
+								"200",
+								"center",
+								"34.111745,-118.113491",
+								"unit",
+								"mi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get distances to tours from point",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required content type of application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the data object and its structure\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data).to.exist.and.to.be.an('object');",
+									"  pm.expect(responseData.data.data).to.exist.and.to.be.an('array');",
+									"  pm.expect(responseData.data.data[0]._id).to.exist.and.to.be.a('string');",
+									"  pm.expect(responseData.data.data[0].name).to.exist.and.to.be.a('string');",
+									"  pm.expect(responseData.data.data[0].distance).to.exist.and.to.be.a('number');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Distance value is a non-negative number\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data.data).to.be.an('array');",
+									"",
+									"  responseData.data.data.forEach(function(item) {",
+									"    pm.expect(item.distance).to.be.a('number').and.to.be.at.least(0);",
+									"  });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Name field must be a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data).to.be.an('object');",
+									"  pm.expect(responseData.data.data).to.be.an('array');",
+									"  ",
+									"  responseData.data.data.forEach(function(item) {",
+									"    pm.expect(item.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+									"  });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/distances/34.111745,-118.113491/unit/mi",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"distances",
+								"34.111745,-118.113491",
+								"unit",
+								"mi"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Get all reviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - status, requestedAt, results, data\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('status');",
+									"    pm.expect(responseData).to.have.property('requestedAt');",
+									"    pm.expect(responseData).to.have.property('results');",
+									"    pm.expect(responseData).to.have.property('data');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data array is present and has expected number of elements\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.exist.and.to.be.an('object');",
+									"    pm.expect(responseData.data.data).to.exist.and.to.be.an('array');",
+									"    pm.expect(responseData.data.data).to.have.lengthOf(responseData.results);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data properties validation\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    ",
+									"    responseData.data.data.forEach(review => {",
+									"        pm.expect(review.review).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Review should be a non-empty string\");",
+									"        pm.expect(review.rating).to.be.a('number').and.to.satisfy(val => val >= 0, \"Rating should be a non-negative integer\");",
+									"        pm.expect(review.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$/, \"CreatedAt should be in a valid date format\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/reviews/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  console.log(responseData);\r",
+									"\r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.status).to.equal(\"success\");\r",
+									"  pm.expect(responseData.data).to.exist.and.to.be.an('object');\r",
+									"  pm.expect(responseData.data.data._id).to.exist;\r",
+									"  pm.expect(responseData.data.data.review).to.exist;\r",
+									"  pm.expect(responseData.data.data.rating).to.exist;\r",
+									"  pm.expect(responseData.data.data.createdAt).to.exist;\r",
+									"  pm.expect(responseData.data.data.tour).to.exist;\r",
+									"//   pm.expect(responseData.data.data.user).to.exist; // include in production\r",
+									"  pm.expect(responseData.data.data.__v).to.exist;\r",
+									"  pm.expect(responseData.data.data.id).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate response properties\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"\r",
+									"    pm.expect(responseData.status).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Status should be a non-empty string\");\r",
+									"\r",
+									"    pm.expect(responseData.data.data.rating).to.be.a('number').and.to.be.at.least(0, \"Rating should be a non-negative integer\");\r",
+									"\r",
+									"    pm.expect(responseData.data.data.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/reviews/666acca83a2247d19fa17c3e",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"666acca83a2247d19fa17c3e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('status');",
+									"    pm.expect(responseData).to.have.property('data');",
+									"    pm.expect(responseData.data.data).to.have.property('review');",
+									"    pm.expect(responseData.data.data).to.have.property('rating');",
+									"    pm.expect(responseData.data.data).to.have.property('createdAt');",
+									"    pm.expect(responseData.data.data).to.have.property('tour');",
+									"    pm.expect(responseData.data.data).to.have.property('user');",
+									"    pm.expect(responseData.data.data).to.have.property('_id');",
+									"    pm.expect(responseData.data.data).to.have.property('__v');",
+									"    pm.expect(responseData.data.data).to.have.property('id');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Review is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data.data.review).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Review should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Rating is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.data.data.rating).to.be.a('number');",
+									"    pm.expect(responseData.data.data.rating).to.be.at.least(0, \"Rating should be a non-negative integer\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data object contains the expected number of elements\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.data).to.be.an('object');",
+									"  pm.expect(Object.keys(responseData.data.data)).to.have.lengthOf(8);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"review\": \"Loved it\",\r\n    \"rating\": 4,\r\n    \"tour\": \"5c88fa8cf4afda39709c2951\",\r\n    \"user\": \"5cd14baa326b861fab416f56\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/reviews/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 230ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(230);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate the response schema for the updated review\", function () {\r",
+									"    const responseData = pm.response.json().data.data;\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('id');\r",
+									"    pm.expect(responseData).to.have.property('review');\r",
+									"    // pm.expect(responseData).to.have.property('user'); // include in production\r",
+									"    pm.expect(responseData).to.have.property('rating');\r",
+									"    pm.expect(responseData).to.have.property('tour');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"review\": \"Was ok\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/reviews/666b86a12eccec14a8a07cfb",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"666b86a12eccec14a8a07cfb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 204\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(204);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body is empty\", function () {\r",
+									"    pm.expect(pm.response.text()).to.be.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/reviews/666b86a12eccec14a8a07cfb",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"666b86a12eccec14a8a07cfb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all reviews on tour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData).to.have.property('status');",
+									"  pm.expect(responseData).to.have.property('requestedAt');",
+									"  pm.expect(responseData).to.have.property('results');",
+									"  pm.expect(responseData).to.have.property('data');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data array is present and has the expected number of elements\", function () {",
+									"    const responseData = pm.response.json().data;",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.exist.and.to.be.an('array');",
+									"    pm.expect(responseData.data).to.have.lengthOf(12);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate review, rating, and createdAt\", function () {",
+									"    const responseData = pm.response.json();",
+									"    const reviews = responseData.data.data;",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(reviews).to.be.an('array').that.is.not.empty;",
+									"",
+									"    reviews.forEach(review => {",
+									"        pm.expect(review.review).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Review should be a non-empty string\");",
+									"        pm.expect(review.rating).to.be.a('number').and.to.be.at.least(0, \"Rating should be a non-negative integer\");",
+									"        pm.expect(review.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/5c88fa8cf4afda39709c2955/reviews/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"5c88fa8cf4afda39709c2955",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new review on tour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", function () {",
+									"  pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data object structure is valid\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.data).to.be.an('object');",
+									"  pm.expect(responseData.data.data).to.be.an('object');",
+									"  pm.expect(responseData.data.data).to.include.all.keys('review', 'rating', 'createdAt', 'tour', 'user', '_id', '__v', 'id');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Review is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data).to.be.an('object');",
+									"  pm.expect(responseData.data.data.review).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Review should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Rating is within a valid range\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.data.data.rating).to.be.a('number');",
+									"    pm.expect(responseData.data.data.rating).to.be.at.least(0);",
+									"    pm.expect(responseData.data.data.rating).to.be.at.most(5);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate that 'createdAt' field is in a valid date format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.data.data.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$/);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rating\": 5,\r\n    \"review\": \"meh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/5c88fa8cf4afda39709c2955/reviews/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"5c88fa8cf4afda39709c2955",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('status');\r",
+									"    pm.expect(responseData).to.have.property('requestedAt');\r",
+									"    pm.expect(responseData).to.have.property('results');\r",
+									"    pm.expect(responseData).to.have.property('data');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Data array is present and contains expected number of elements\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.data).to.be.an('object');\r",
+									"  pm.expect(responseData.data.data).to.be.an('array');\r",
+									"  pm.expect(responseData.data.data.length).to.equal(responseData.results);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate presence and data types of _id, name, email, photo, and role fields\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.data).to.be.an('object');\r",
+									"  pm.expect(responseData.data.data).to.be.an('array');\r",
+									"\r",
+									"  responseData.data.data.forEach(function(user) {\r",
+									"    pm.expect(user).to.have.property('_id').that.is.a('string');\r",
+									"    pm.expect(user).to.have.property('name').that.is.a('string');\r",
+									"    pm.expect(user).to.have.property('email').that.is.a('string');\r",
+									"    pm.expect(user).to.have.property('role').that.is.a('string');\r",
+									"  });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/users/5c8a1dfa2f8fb814b56fa181",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"5c8a1dfa2f8fb814b56fa181"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Tester Bucko\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/users/5c8a1dfa2f8fb814b56fa181",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"5c8a1dfa2f8fb814b56fa181"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/users/5c8a1d5b0190b214360dc057",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"5c8a1d5b0190b214360dc057"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type header is application/json\", function () {",
+									"  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data object has the correct structure\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.be.an('object');",
+									"    pm.expect(responseData.data.data).to.be.an('object');",
+									"    pm.expect(responseData.data.data).to.include.all.keys('_id', 'name', 'email', 'role', '__v');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data object contains expected fields\", function () {",
+									"    const responseData = pm.response.json().data;",
+									"    ",
+									"    pm.expect(responseData.data).to.be.an('object');",
+									"    pm.expect(responseData.data).to.include.all.keys('_id', 'name', 'email', 'role');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Email field is in a valid email format\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data.data.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$/);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/users/current-user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"current-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - status and data\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('status');",
+									"    pm.expect(responseData).to.have.property('data');",
+									"});",
+									"",
+									"",
+									"pm.test(\"User object in the data should be valid\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.data.user).to.exist;",
+									"  pm.expect(responseData.data.user).to.be.an('object');",
+									"  pm.expect(responseData.data.user).to.have.property('_id').that.is.a('string');",
+									"  pm.expect(responseData.data.user).to.have.property('name').that.is.a('string');",
+									"  pm.expect(responseData.data.user).to.have.property('email').that.is.a('string');",
+									"  pm.expect(responseData.data.user).to.have.property('role').that.is.a('string');",
+									"  pm.expect(responseData.data.user).to.have.property('__v').that.is.a('number');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Email is in a valid format\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data.user.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/, \"Email is not in a valid format\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Role is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data.user.role).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Role should not be empty\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Current User\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/users/update-current-user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"update-current-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 204\", function () {\r",
+									"  pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body is null\", function () {\r",
+									"    const responseData = xml2Json(pm.response.text());\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.null;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Current User\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/users/delete-current-user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"delete-current-user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Sign up user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"JWT\", pm.response.json().token);",
+									"",
+									"",
+									"pm.test(\"Response status code is 201\", function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - status, token, and data\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('status');",
+									"    pm.expect(responseData).to.have.property('token');",
+									"    pm.expect(responseData).to.have.property('data');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the data object - name, email, role, and active\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data.user).to.exist;",
+									"  pm.expect(responseData.data.user.name).to.be.a('string');",
+									"  pm.expect(responseData.data.user.email).to.be.a('string');",
+									"  pm.expect(responseData.data.user.role).to.exist;",
+									"  pm.expect(responseData.data.user.active).to.be.a('boolean');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 400ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(400);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"test admin\",\r\n\t\"email\": \"1@email.com\",\r\n\t\"password\": \"{{PASSWORD}}\",\r\n\t\"confirmPassword\": \"{{PASSWORD}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/users/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"JWT\", pm.response.json().token);\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(400);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - status, token, and data\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('status');\r",
+									"    pm.expect(responseData).to.have.property('token');\r",
+									"    pm.expect(responseData).to.have.property('data');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"User object schema is valid\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.data.user._id).to.be.a('string');\r",
+									"    pm.expect(responseData.data.user.name).to.be.a('string');\r",
+									"    pm.expect(responseData.data.user.email).to.be.a('string');\r",
+									"    pm.expect(responseData.data.user.role).to.be.a('string');\r",
+									"    pm.expect(responseData.data.user.__v).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"email\": \"testuser@email.com\",\r\n\t\"password\": \"{{PASSWORD}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:3000/api/v1/users/login",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot passord",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify the presence of error object with statusCode, status, isOperational fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.status).to.exist.and.to.equal('success');\r",
+									"    pm.expect(responseData.message).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 2000ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"testuser@email.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:3000/api/v1/users/forgot-password",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"JWT\", pm.response.json().token);",
+									"",
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the structure of the response schema\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.status).to.exist;",
+									"    pm.expect(responseData.message).to.exist;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"{{PASSWORD}}\",\r\n    \"confirmPassword\": \"{{PASSWORD}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/users/reset-password/5c8a1dfa2f8fb814b56fa181",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"reset-password",
+								"5c8a1dfa2f8fb814b56fa181"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
