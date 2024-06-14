@@ -62,7 +62,10 @@ app.use((request, response, next) => {
 });
 
 app.get("/", (request, response) => {
-  response.status(200).render("base");
+  response.status(200).render("base", {
+    tour: "The Forest Hiker",
+    user: "Test",
+  });
 });
 
 app.use("/api/v1/tours", tourRouter); //* using middleware function created in another file
