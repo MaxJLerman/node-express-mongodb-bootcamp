@@ -68,6 +68,12 @@ app.get("/", (request, response) => {
   });
 });
 
+app.get("/overview", (request, response) => {
+  response.status(200).render("overview", {
+    title: "All Tours",
+  });
+});
+
 app.use("/api/v1/tours", tourRouter); //* using middleware function created in another file
 app.use("/api/v1/users", userRouter); //* now created a sub application (router system) for "tours" resource
 app.use("/api/v1/reviews", reviewRouter);
