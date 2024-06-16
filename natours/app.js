@@ -74,6 +74,12 @@ app.get("/overview", (request, response) => {
   });
 });
 
+app.get("/tour", (request, response) => {
+  response.status(200).render("tour", {
+    title: "The Forest Hiker",
+  });
+});
+
 app.use("/api/v1/tours", tourRouter); //* using middleware function created in another file
 app.use("/api/v1/users", userRouter); //* now created a sub application (router system) for "tours" resource
 app.use("/api/v1/reviews", reviewRouter);
