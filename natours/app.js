@@ -12,6 +12,7 @@ const globalErrorHandler = require("./src/controllers/errorController");
 const tourRouter = require("./src/routes/tourRoutes");
 const userRouter = require("./src/routes/userRoutes");
 const reviewRouter = require("./src/routes/reviewRoutes");
+const viewRouter = require("./src/routes/viewRoutes");
 
 const app = express();
 
@@ -61,25 +62,7 @@ app.use((request, response, next) => {
   next();
 });
 
-app.get("/", (request, response) => {
-  response.status(200).render("base", {
-    tour: "The Forest Hiker",
-    user: "Test",
-  });
-});
-
-app.get("/overview", (request, response) => {
-  response.status(200).render("overview", {
-    title: "All Tours",
-  });
-});
-
-app.get("/tour", (request, response) => {
-  response.status(200).render("tour", {
-    title: "The Forest Hiker",
-  });
-});
-
+app.use("/", viewRouter); //* using middleware function created in another file
 app.use("/api/v1/tours", tourRouter); //* using middleware function created in another file
 app.use("/api/v1/users", userRouter); //* now created a sub application (router system) for "tours" resource
 app.use("/api/v1/reviews", reviewRouter);
