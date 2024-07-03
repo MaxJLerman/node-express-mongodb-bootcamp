@@ -12,40 +12,38 @@ import {
   getToursWithin,
   getDistances,
 } from "@controllers/tourController";
-import authController from "../controllers/authController";
-import reviewRouter from "../routes/reviewRoutes";
+import { protect, restrictTo } from "@controllers/authController";
+import reviewRouter from "@routes/reviewRoutes";
 
-const { protect, restrictTo } = authController;
+const tourRouter = express.Router(); //* middleware function created
 
-const router = express.Router(); //* middleware function created
+tourRouter.use("/:tourId/reviews", reviewRouter); //? for this specific route, use reviewRouter instead of tourRouter
 
-router.use("/:tourId/reviews", reviewRouter); //? for this specific route, use reviewRouter instead of tourRouter
+tourRouter.route("/top-5-cheap").get(aliasTopTours, getAllTours);
 
-router.route("/top-5-cheap").get(aliasTopTours, getAllTours);
+tourRouter.route("/tour-statistics").get(getTourStatistics);
 
-router.route("/tour-statistics").get(getTourStatistics);
-
-router
+tourRouter
   .route("/monthly-plan/:year")
   .get(protect, restrictTo("admin", "lead-guide", "guide"), getMonthlyPlan);
 
-router
+tourRouter
   .route("/tours-within/:distance/center/:latitudelongitude/unit/:unit")
   .get(getToursWithin);
 
-router.route("/distances/:latitudelongitude/unit/:unit").get(getDistances);
+tourRouter.route("/distances/:latitudelongitude/unit/:unit").get(getDistances);
 
 //* neither GET (all) or POST requests need an id parameter, so can be chained together like so:
-router
+tourRouter
   .route("/")
   .get(getAllTours)
   .post(protect, restrictTo("admin", "lead-guide"), createTour);
 
 //* rest of the headers do need an id parameter, so can be chained together like so:
-router
+tourRouter
   .route("/:id")
   .get(getOneTour)
   .patch(protect, restrictTo("admin", "lead-guide"), updateTour)
   .delete(protect, restrictTo("admin", "lead-guide"), deleteTour);
 
-module.exports = router;
+export default tourRouter;

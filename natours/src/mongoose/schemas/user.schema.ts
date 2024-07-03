@@ -1,11 +1,13 @@
 import { Document, Model } from "mongoose";
 
+export type RoleOptions = "user" | "guide" | "lead-guide" | "admin";
+
 export interface IUser extends Document {
   _id?: string;
   name: string;
   email: string;
   photo?: string;
-  role?: "user" | "guide" | "lead-guide" | "admin";
+  role?: RoleOptions;
   password: string | undefined;
   confirmPassword: string | undefined;
   passwordChangedAt?: Date;
@@ -25,3 +27,7 @@ export interface IUserMethods {
 
 //* used type because User model uses instance methods
 export type UserModel = Model<IUser, {}, IUserMethods>;
+
+export type UserDocument = Document<unknown, {}, IUser> &
+  IUser &
+  IUserMethods & { _id: string };

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { promisify } from "util";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
@@ -7,7 +7,7 @@ import User from "@models/userModel";
 import catchAsync from "@utils/catchAsync";
 import AppError from "@utils/appError";
 import sendEmail from "@utils/email";
-import { IUser } from "@schemas/user.schema";
+import { IUser, RoleOptions, UserDocument } from "@schemas/user.schema";
 
 const signToken = (id: string | number): string => {
   const token = jwt.sign({ id }, process.env["JWT_SECRET"]!, {
@@ -111,7 +111,9 @@ export const protect = catchAsync(
     );
 
     //* check if user still exists
-    const currentUser = await User.findById(decodedData.id);
+    const currentUser: UserDocument | null = await User.findById(
+      (decodedData as any).id, //! return later
+    );
     if (!currentUser) {
       return next(
         new AppError("User belonging to this token no longer exists", 401),
@@ -119,7 +121,9 @@ export const protect = catchAsync(
     }
 
     //* checks if user has changed their password after the token was issued
-    if (currentUser.changedPasswordAfter(decodedData.iat)) {
+    if (
+      currentUser.changedPasswordAfter((decodedData as any).iat) //! return later
+    ) {
       return next(
         new AppError(
           "User recently changed password, try logging in again",
@@ -129,14 +133,17 @@ export const protect = catchAsync(
     }
 
     //* now grant access to protected route
-    request.user = currentUser;
+    (request as any).user = currentUser; //! return later
     next();
   },
 );
 
-exports.restrictTo = (...roles) => {
-  return (request, response, next) => {
-    if (!roles.includes(request.user.role)) {
+//? at least one role must be provided, but also allows for additional roles
+export const restrictTo = (...roles: RoleOptions[]) => {
+  return (request: Request, _response: Response, next: NextFunction) => {
+    if (
+      !roles.includes((request as any).user.role) //! return later
+    ) {
       return next(
         new AppError("You do not have permission to perform this action", 403),
       );
@@ -146,88 +153,103 @@ exports.restrictTo = (...roles) => {
   };
 };
 
-exports.forgotPassword = catchAsync(async (request, response, next) => {
-  const user = await User.findOne({ email: request.body.email });
-  if (!user) {
-    return next(new AppError("There is no user with this email", 404));
-  }
-
-  const resetToken = user.createPasswordResetToken();
-  await user.save({ validateBeforeSave: false });
-
-  const resetURL = `${request.protocol}://${request.get(
-    "host",
-  )}/api/v1/users/reset-password/${resetToken}`;
-
-  const message = `Forgot your password? Sumbit a PATCH request with your new password + confirmPassword to: ${resetURL}.\nIf you didn't forget your password, please ignore this email.`;
-
-  try {
-    await sendEmail({
-      email: user.email,
-      subject: "Your password reset token (valid for 10 minutes)",
-      message,
+export const forgotPassword = catchAsync(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const user: UserDocument | null = await User.findOne({
+      email: request.body.email,
     });
+    if (!user) {
+      return next(new AppError("There is no user with this email", 404));
+    }
 
-    response.status(200).json({
-      status: "success",
-      message: "Token sent to email",
-    });
-  } catch (error) {
-    user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
+    const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    return next(
-      new AppError("Something broke and we couldn't send that email", 500),
-    );
-  }
-});
+    const resetURL = `${request.protocol}://${request.get(
+      "host",
+    )}/api/v1/users/reset-password/${resetToken}`;
 
-exports.resetPassword = catchAsync(async (request, response, next) => {
-  //* get user based on the token
-  const hashedToken = crypto
-    .createHash("sha256")
-    .update(request.params["token"])
-    .digest("hex");
+    const message = `Forgot your password? Sumbit a PATCH request with your new password + confirmPassword to: ${resetURL}.\nIf you didn't forget your password, please ignore this email.`;
 
-  const user = await User.findOne({
-    passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() },
-  });
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: "Your password reset token (valid for 10 minutes)",
+        message,
+      });
 
-  //* if token not expired & there is a user, set new password
-  if (!user) {
-    return next(new AppError("Token is invalid or has expired", 400));
-  }
+      response.status(200).json({
+        status: "success",
+        message: "Token sent to email",
+      });
+    } catch (error) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save({ validateBeforeSave: false });
 
-  user.password = request.body.password;
-  user.confirmPassword = request.body.confirmPassword;
-  user.passwordResetToken = undefined;
-  user.passwordResetExpires = undefined;
-  await user.save();
+      return next(
+        new AppError("Something broke and we couldn't send that email", 500),
+      );
+    }
+  },
+);
 
-  //* update changedPasswordAt property for user
+export const resetPassword = catchAsync(
+  async (request: Request, response: Response, next: NextFunction) => {
+    //* get user based on the token
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(request.params["token"] as crypto.BinaryLike)
+      .digest("hex");
 
-  //* log user in, send JWT to user
-  createSendToken(user, 200, response);
-});
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
 
-exports.updatePassword = catchAsync(async (request, response, next) => {
-  //* get user from collection
-  const user = await User.findById(request.user.id).select("+password"); //? include password select as it is not included in the response by default
+    //* if token not expired & there is a user, set new password
+    if (!user) {
+      return next(new AppError("Token is invalid or has expired", 400));
+    }
 
-  //* check if POSTed current password is correct
-  if (
-    !(await user.correctPassword(request.body.currentPassword, user.password))
-  ) {
-    return next(new AppError("Your current password is wrong.", 401));
-  }
+    user.password = request.body.password;
+    user.confirmPassword = request.body.confirmPassword;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
 
-  //* if so, update password
-  user.password = request.body.password;
-  user.confirmPassword = request.body.confirmPassword;
-  await user.save();
+    //* update changedPasswordAt property for user
 
-  //* log user in, send JWT to user
-  createSendToken(user, 200, response);
-});
+    //* log user in, send JWT to user
+    createSendToken(user, 200, response);
+  },
+);
+
+export const updatePassword = catchAsync(
+  async (request: Request, response: Response, next: NextFunction) => {
+    //* get user from collection
+    const user: UserDocument | null = await User.findById(
+      (request as any).user.id, //! return later
+    ).select("+password"); //? include password select as it is not included in the response by default
+
+    if (user !== null) {
+      //* check if POSTed current password is correct
+      if (
+        !(await user.correctPassword(
+          request.body.currentPassword,
+          user.password as string,
+        ))
+      ) {
+        return next(new AppError("Your current password is wrong.", 401));
+      }
+
+      //* if so, update password
+      user.password = request.body.password;
+      user.confirmPassword = request.body.confirmPassword;
+      await user.save();
+
+      //* log user in, send JWT to user
+      createSendToken(user, 200, response);
+    }
+  },
+);

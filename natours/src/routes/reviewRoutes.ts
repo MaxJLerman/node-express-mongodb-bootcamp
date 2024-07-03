@@ -1,33 +1,30 @@
-const express = require("express");
+import express from "express";
 
-const reviewController = require("../controllers/reviewController");
-const authController = require("../controllers/authController");
-
-const {
+import {
   getAllReviews,
   getOneReview,
   setTourUserId,
   createReview,
   updateReview,
   deleteReview,
-} = reviewController;
-const { protect, restrictTo } = authController;
+} from "@controllers/reviewController";
+import { protect, restrictTo } from "@controllers/authController";
 
-const router = express.Router({
+const reviewRouter = express.Router({
   mergeParams: true, //? allows us to use the :tourId parameter (coming from the tourRouter) in the reviewRouter
 });
 
-router.use(protect);
+reviewRouter.use(protect);
 
-router
+reviewRouter
   .route("/")
   .get(getAllReviews)
   .post(restrictTo("user"), setTourUserId, createReview);
 
-router
+reviewRouter
   .route("/:id")
   .get(getOneReview)
   .patch(restrictTo("user", "admin"), updateReview)
   .delete(restrictTo("user", "admin"), deleteReview);
 
-module.exports = router;
+export default reviewRouter;

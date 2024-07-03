@@ -1,5 +1,5 @@
 import path from "path";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
@@ -9,10 +9,10 @@ import hpp from "hpp";
 import xssClean from "@utils/xssClean";
 import AppError from "@utils/appError";
 import globalErrorHandler from "@controllers/errorController";
-import tourRouter from "./src/routes/tourRoutes";
-import userRouter from "./src/routes/userRoutes";
-import reviewRouter from "./src/routes/reviewRoutes";
-import viewRouter from "./src/routes/viewRoutes";
+import tourRouter from "@routes/tourRoutes";
+import userRouter from "@routes/userRoutes";
+import reviewRouter from "@routes/reviewRoutes";
+import viewRouter from "@routes/viewRoutes";
 
 const app = express();
 
@@ -56,8 +56,8 @@ app.use(
   }),
 );
 
-app.use((request, response, next) => {
-  request.requestTime = new Date().toISOString();
+app.use((request: Request, _response: Response, next: NextFunction) => {
+  (request as any).requestTime = new Date().toISOString(); //! return later
 
   next();
 });
@@ -67,10 +67,11 @@ app.use("/api/v1/tours", tourRouter); //* using middleware function created in a
 app.use("/api/v1/users", userRouter); //* now created a sub application (router system) for "tours" resource
 app.use("/api/v1/reviews", reviewRouter);
 
-app.all("*", (request, response, next) => {
+app.all("*", (request: Request, _response: Response, next: NextFunction) => {
   next(new AppError(`Can't find ${request.originalUrl} on the server`, 404));
 });
 
-app.use(globalErrorHandler);
+// @ts-ignore
+app.use(globalErrorHandler); //! return later
 
 export default app;

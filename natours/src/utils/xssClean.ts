@@ -2,17 +2,19 @@ import { Request, Response, NextFunction } from "express";
 
 import clean from "@lib/xss";
 
-function xxsClean() {
+const xssClean = () => {
   return (request: Request, _response: Response, next: NextFunction) => {
     if (request.body) request.body = clean(request.body);
-    if (request.query) request.query = clean(request.query);
-    if (request.params) request.params = clean(request.params);
+    // @ts-ignore
+    if (request.query) request.query = clean(request.query); //! return later
+    // @ts-ignore
+    if (request.params) request.params = clean(request.params); //! return later
 
     next();
   };
-}
+};
 
-export default xxsClean;
+export default xssClean;
 
 // TODO: adapt code to below example
 /*
