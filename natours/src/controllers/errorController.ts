@@ -1,9 +1,11 @@
-const AppError = require("../utils/appError");
+import { NextFunction, Response } from "express";
 
-const handleDatabaseCastError = (error) =>
+import AppError from "@utils/appError";
+
+const handleDatabaseCastError = (error: any) =>
   new AppError(`Invalid ${error.path}: ${error.value}`, 400);
 
-const handleDuplicateFields = (error) => {
+const handleDuplicateFields = (error: any) => {
   const duplicateFieldValue = error.errmsg.match(/(["'])(\\?.)*?\1/)[0];
 
   return new AppError(
@@ -12,9 +14,9 @@ const handleDuplicateFields = (error) => {
   );
 };
 
-const handleMongooseValidationError = (error) => {
+const handleMongooseValidationError = (error: any) => {
   const errorMessages = Object.values(error.errors).map(
-    (element) => element.message,
+    (element: any) => element.message,
   );
 
   return new AppError(
@@ -31,7 +33,7 @@ const handleJsonWebTokenError = () =>
 const handleTokenExpiredError = () =>
   new AppError("Token expired, try logging in again", 401);
 
-const sendDevelopmentError = (error, response) => {
+const sendDevelopmentError = (error: AppError, response: Response) => {
   response.status(error.statusCode).json({
     error,
     status: error.status,
@@ -40,7 +42,7 @@ const sendDevelopmentError = (error, response) => {
   });
 };
 
-const sendProductionError = (error, response) => {
+const sendProductionError = (error: AppError, response: Response) => {
   //? operational, trusted error: send message to client
   if (error.isOperational) {
     response.status(error.statusCode).json({
@@ -59,13 +61,18 @@ const sendProductionError = (error, response) => {
   }
 };
 
-module.exports = (error, request, response, next) => {
+const globalErrorHandler = (
+  error: AppError,
+  _request: Request,
+  response: Response,
+  _next: NextFunction,
+) => {
   error.statusCode = error.statusCode || 500;
   error.status = error.status || "error";
 
-  if (process.env.NODE_ENV === "development") {
+  if (process.env["NODE_ENV"] === "development") {
     sendDevelopmentError(error, response);
-  } else if (process.env.NODE_ENV === "production") {
+  } else if (process.env["NODE_ENV"] === "production") {
     let errorCopy = { ...error };
 
     if (error.name === "CastError") {
@@ -91,3 +98,5 @@ module.exports = (error, request, response, next) => {
     sendProductionError(errorCopy, response);
   }
 };
+
+export default globalErrorHandler;

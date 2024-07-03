@@ -1,18 +1,18 @@
-const path = require("path");
-const express = require("express");
-const morgan = require("morgan");
-const rateLimit = require("express-rate-limit");
-const helmet = require("helmet");
-const mongoSanitize = require("express-mongo-sanitize");
-const hpp = require("hpp");
+import path from "path";
+import express from "express";
+import morgan from "morgan";
+import rateLimit from "express-rate-limit";
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
+import hpp from "hpp";
 
-const xss = require("./src/utils/xssClean");
-const AppError = require("./src/utils/appError");
-const globalErrorHandler = require("./src/controllers/errorController");
-const tourRouter = require("./src/routes/tourRoutes");
-const userRouter = require("./src/routes/userRoutes");
-const reviewRouter = require("./src/routes/reviewRoutes");
-const viewRouter = require("./src/routes/viewRoutes");
+import xssClean from "@utils/xssClean";
+import AppError from "@utils/appError";
+import globalErrorHandler from "@controllers/errorController";
+import tourRouter from "./src/routes/tourRoutes";
+import userRouter from "./src/routes/userRoutes";
+import reviewRouter from "./src/routes/reviewRoutes";
+import viewRouter from "./src/routes/viewRoutes";
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public"))); //? serving static file
 
 app.use(helmet()); //* middleware function that helps secure Express apps by setting various HTTP headers
 
-if (process.env.NODE_ENV === "development") {
+if (process.env["NODE_ENV"] === "development") {
   app.use(morgan("dev")); //* middleware function for dev logging
 }
 
@@ -40,7 +40,7 @@ app.use(express.json({ limit: "10kb" })); //? body parser, reads data from body 
 
 app.use(mongoSanitize()); //? data sanitisation against NoSQL Query Injection
 
-app.use(xss()); //? data sanitisation against Cross Site Scripting (XSS)
+app.use(xssClean()); //? data sanitisation against Cross Site Scripting (XSS)
 
 //? prevents parameter pollution
 app.use(
@@ -73,4 +73,4 @@ app.all("*", (request, response, next) => {
 
 app.use(globalErrorHandler);
 
-module.exports = app;
+export default app;

@@ -1,7 +1,9 @@
-const mongoose = require("mongoose");
-const slugify = require("slugify");
+import { Schema, Query, model, Model } from "mongoose";
+import slugify from "slugify";
 
-const tourSchema = new mongoose.Schema(
+import { ITour } from "@schemas/tour.schema";
+
+const tourSchema = new Schema<ITour>(
   {
     name: {
       type: String,
@@ -33,7 +35,7 @@ const tourSchema = new mongoose.Schema(
       default: 4.5,
       min: [1, "Rating must be avove 1.0"],
       max: [5, "Rating must be below 5.0"],
-      set: (value) => Math.round(value * 10) / 10,
+      set: (value: number) => Math.round(value * 10) / 10,
     },
     ratingsQuantity: {
       type: Number,
@@ -46,7 +48,7 @@ const tourSchema = new mongoose.Schema(
     priceDiscount: {
       type: Number,
       validate: {
-        validator: function (value) {
+        validator: function (this: ITour, value: number) {
           //! can't use "this" keyword on updating a document, "this" only points to the current document on a new document creation
           return value < this.price;
         },
@@ -103,7 +105,7 @@ const tourSchema = new mongoose.Schema(
     guides: [
       //? modelling tour guides using referencing
       {
-        type: mongoose.Schema.ObjectId,
+        type: Schema.ObjectId,
         ref: "User",
       },
     ],
@@ -119,7 +121,7 @@ tourSchema.index({ slug: 1 });
 tourSchema.index({ startLocation: "2dsphere" });
 
 //? creates a property on a tour object that only exists in the response, not in the database
-tourSchema.virtual("durationWeeks").get(function () {
+tourSchema.virtual("durationWeeks").get(function (this: ITour) {
   return this.duration / 7;
 });
 
@@ -131,14 +133,14 @@ tourSchema.virtual("reviews", {
 });
 
 //* pre-save hook: middleware that runs before a "save" or "create" but not "insertMany" event (document is saved to database)
-tourSchema.pre("save", function (next) {
+tourSchema.pre<ITour>("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
 
   next();
 });
 
-tourSchema.pre("save", function (next) {
-  if (process.env.NODE_ENV === "development") {
+tourSchema.pre<ITour>("save", function (next) {
+  if (process.env["NODE_ENV"] === "development") {
     console.log("Saving...");
   }
 
@@ -146,7 +148,7 @@ tourSchema.pre("save", function (next) {
 });
 
 //? modelling tour guides by embedding
-// tourSchema.pre("save", async function (next) {
+// tourSchema.pre<ITour>("save", async function (next) {
 //   const guidesPromises = this.guides.map(async (guideId) =>
 //     User.findById(guideId),
 //   );
@@ -156,8 +158,8 @@ tourSchema.pre("save", function (next) {
 // });
 
 //* post-save hook: middleware that runs after a "save" or "create" but not "insertMany" event
-tourSchema.post("save", function (document, next) {
-  if (process.env.NODE_ENV === "development") {
+tourSchema.post<ITour>("save", function (_document, next) {
+  if (process.env["NODE_ENV"] === "development") {
     // console.log(document);
   }
 
@@ -165,15 +167,13 @@ tourSchema.post("save", function (document, next) {
 });
 
 //* pre-query hook: middleware that runs before a query is executed, matches all events starting with "find" eg. find, findOne, findOneAndUpdate, findOneAndDelete
-tourSchema.pre(/^find/, function (next) {
+tourSchema.pre<Query<ITour, ITour>>(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } }); //? filters out documents that have a "secretTour" property set to true
-
-  this.start = Date.now();
 
   next();
 });
 
-tourSchema.pre(/^find/, function (next) {
+tourSchema.pre<Query<ITour, ITour>>(/^find/, function (next) {
   this.populate({
     //! using populate creates another query, may hinder performance if used many times all over the place
     path: "guides", //? populates the guides prop with the User data referenced in each ObjectId (only in the response, not the database)
@@ -183,7 +183,11 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-tourSchema.post(/^find/, function (documents, next) {
+interface TimedQuery extends Query<ITour, ITour> {
+  start: number;
+}
+
+tourSchema.post<TimedQuery>(/^find/, function (_documents, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds`);
 
   next();
@@ -198,6 +202,6 @@ tourSchema.post(/^find/, function (documents, next) {
 //   next();
 // });
 
-const Tour = mongoose.model("Tour", tourSchema);
+const Tour: Model<ITour> = model<ITour>("Tour", tourSchema);
 
-module.exports = Tour;
+export default Tour;

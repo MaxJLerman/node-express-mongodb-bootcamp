@@ -1,11 +1,11 @@
-const { inHTMLData } = require("xss-filters");
+import { inHTMLData } from "xss-filters";
 
 /**
  * Clean for xss.
  * @param {string/object} data - The value to sanitize
  * @return {string/object} The sanitized value
  */
-function clean(data = "") {
+function clean(data = ""): string {
   let isObject = false;
   if (typeof data === "object") {
     data = JSON.stringify(data);
@@ -18,4 +18,4 @@ function clean(data = "") {
   return data;
 }
 
-module.exports = clean;
+export default clean;

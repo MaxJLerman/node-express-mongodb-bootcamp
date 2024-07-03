@@ -1,0 +1,98 @@
+import { Schema, Query, model, Model, Types } from "mongoose";
+
+import Tour from "@models/tourModel";
+import { IReview, ReviewModel } from "@schemas/review.schema";
+
+const reviewSchema = new Schema<IReview, ReviewModel>(
+  {
+    review: {
+      type: String,
+      required: [true, "A review must have a review."],
+    },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      required: [true, "A review must have a rating."],
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    tour: {
+      type: Schema.ObjectId,
+      ref: "Tour",
+      required: [true, "A review must belong to a tour."],
+    },
+    user: {
+      type: Schema.ObjectId,
+      ref: "User",
+      required: [true, "A review must belong to a user."],
+    },
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+);
+
+//! doesn't work but it SHOULD
+//! shop making my life DIFFICULT
+//? should reject POSTing >1 review with same tour & user IDs
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+//TODO: try POSTing reviews with same user on 1 tour tomorrow, shouldn't be able to
+//TODO: fix later, didn't work after 1 day like the course man said (╯°□°)╯︵ ┻━┻
+
+reviewSchema.pre<Query<IReview, IReview>>(/^find/, function (next) {
+  this.populate({
+    path: "user",
+    select: "name photo",
+  });
+
+  next();
+});
+
+reviewSchema.static(
+  "calculateAverageRatings",
+  async function (this: Model<IReview>, tourId: Types.ObjectId) {
+    const stats = await this.aggregate([
+      {
+        $match: { tour: tourId },
+      },
+      {
+        $group: {
+          _id: "$tour",
+          nRating: { $sum: 1 },
+          avgRating: { $avg: "$rating" },
+        },
+      },
+    ]);
+
+    if (stats.length > 0) {
+      await Tour.findByIdAndUpdate(tourId, {
+        ratingsQuantity: stats[0].nRating,
+        ratingsAverage: stats[0].avgRating,
+      });
+    } else {
+      await Tour.findByIdAndUpdate(tourId, {
+        ratingsQuantity: 0,
+        ratingsAverage: 4.5,
+      });
+    }
+  },
+);
+
+reviewSchema.post<IReview>("save", async function (this) {
+  // @ts-ignore //! revisit later
+  await this.constructor.calculateAverageRatings(this, this.tour);
+});
+
+reviewSchema.post(/^findOneAnd/, async function (foundReview) {
+  if (foundReview) {
+    await foundReview.constructor.calculateAverageRatings(foundReview.tour);
+  }
+});
+
+const Review: Model<IReview> = model("Review", reviewSchema);
+
+export default Review;

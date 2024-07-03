@@ -1,10 +1,23 @@
-class APIFeatures {
-  constructor(query, queryString) {
+import { Query } from "mongoose";
+
+interface QueryString {
+  page?: string;
+  sort?: string;
+  limit?: string;
+  fields?: string;
+  [key: string]: any; //? for other possible query parameters
+}
+
+class APIFeatures<T> {
+  query: Query<T[], T>;
+  queryString: QueryString;
+
+  constructor(query: Query<T[], T>, queryString: QueryString) {
     this.query = query;
     this.queryString = queryString;
   }
 
-  filter() {
+  filter(): this {
     const queryObject = { ...this.queryString };
     const excludedFields = ["page", "sort", "limit", "fields"];
     excludedFields.forEach((element) => delete queryObject[element]); //* filtering out protected fields
@@ -20,7 +33,7 @@ class APIFeatures {
     return this;
   }
 
-  sort() {
+  sort(): this {
     if (this.queryString.sort) {
       const sortBy = this.queryString.sort.split(",").join(" ");
       this.query = this.query.sort(sortBy);
@@ -31,7 +44,7 @@ class APIFeatures {
     return this;
   }
 
-  limitFields() {
+  limitFields(): this {
     this.query = this.query.select("-__v"); //? excluding the __v property provided by MongoDB by default
     if (this.queryString.fields) {
       const fields = this.queryString.fields.split(",").join(" ");
@@ -41,9 +54,9 @@ class APIFeatures {
     return this;
   }
 
-  paginate() {
-    const page = this.queryString.page * 1 || 1;
-    const limitAmount = this.queryString.limit * 1 || 100;
+  paginate(): this {
+    const page = parseInt(this.queryString.page as string, 10) || 1;
+    const limitAmount = parseInt(this.queryString.limit as string, 10) || 100;
     const skipAmount = (page - 1) * limitAmount;
     this.query = this.query.skip(skipAmount).limit(limitAmount);
 
@@ -51,4 +64,4 @@ class APIFeatures {
   }
 }
 
-module.exports = APIFeatures;
+export default APIFeatures;

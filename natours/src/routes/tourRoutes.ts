@@ -1,10 +1,6 @@
-const express = require("express");
+import express from "express";
 
-const tourController = require("../controllers/tourController");
-const authController = require("../controllers/authController");
-const reviewRouter = require("../routes/reviewRoutes");
-
-const {
+import {
   aliasTopTours,
   getAllTours,
   getOneTour,
@@ -15,7 +11,10 @@ const {
   getMonthlyPlan,
   getToursWithin,
   getDistances,
-} = tourController;
+} from "@controllers/tourController";
+import authController from "../controllers/authController";
+import reviewRouter from "../routes/reviewRoutes";
+
 const { protect, restrictTo } = authController;
 
 const router = express.Router(); //* middleware function created

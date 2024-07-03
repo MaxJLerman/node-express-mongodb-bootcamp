@@ -14,14 +14,10 @@ exports.getTour = catchAsync(async (request, response, next) => {
   const tour = await Tour.findOne({ slug: request.params.slug }).populate({
     path: "reviews",
     fields: "review rating user",
-    // populate: {
-    //   path: "user",
-    //   select: "name photo",
-    // },
   });
 
   response.status(200).render("tour", {
-    title: "The Forest Hiker",
+    title: `${tour.name} Tour`,
     tour,
   });
 });
