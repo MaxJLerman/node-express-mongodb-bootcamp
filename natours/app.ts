@@ -6,13 +6,27 @@ import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 
-import xssClean from "@utils/xssClean";
-import AppError from "@utils/appError";
-import globalErrorHandler from "@controllers/errorController";
-import tourRouter from "@routes/tourRoutes";
-import userRouter from "@routes/userRoutes";
-import reviewRouter from "@routes/reviewRoutes";
-import viewRouter from "@routes/viewRoutes";
+import xssClean from "./src/utils/xssClean";
+import AppError from "./src/utils/appError";
+import globalErrorHandler from "./src/controllers/errorController";
+import tourRouter from "./src/routes/tourRoutes";
+import userRouter from "./src/routes/userRoutes";
+import reviewRouter from "./src/routes/reviewRoutes";
+import viewRouter from "./src/routes/viewRoutes";
+
+export type EnvVariable = NodeJS.ProcessEnv & {
+  NODE_ENV: string;
+  PORT: number;
+  DATABASE: string;
+  DATABASE_PASSWORD: string;
+  JWT_SECRET: string;
+  JWT_EXPIRES_IN: string;
+  JWT_COOKIE_EXPIRES_IN: number;
+  EMAIL_HOST: string;
+  EMAIL_PORT: number;
+  EMAIL_USERNAME: string;
+  EMAIL_PASSWORD: string;
+};
 
 const app = express();
 
@@ -25,7 +39,9 @@ app.use(express.static(path.join(__dirname, "public"))); //? serving static file
 
 app.use(helmet()); //* middleware function that helps secure Express apps by setting various HTTP headers
 
-if (process.env["NODE_ENV"] === "development") {
+console.log(process.env.NODE_ENV);
+
+if (process.env.NODE_ENV?.trim().toLowerCase() === "development") {
   app.use(morgan("dev")); //* middleware function for dev logging
 }
 

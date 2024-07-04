@@ -11,15 +11,15 @@ process.on("uncaughtException", (error) => {
 
 config({ path: "./config.env" });
 
-const database = process.env["DATABASE"]!.replace(
+const database = process.env.DATABASE!.replace(
   "<DATABASE_PASSWORD>",
-  process.env["DATABASE_PASSWORD"]!,
+  process.env.DATABASE_PASSWORD!,
 );
 connect(database).then(() => {
   console.log("database connection successful");
 });
 
-const port = process.env["PORT"]! || 3000;
+const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
   console.log(`listening on port ${port}...`);
 });
