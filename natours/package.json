@@ -4,10 +4,8 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "start": "SET NODE_ENV=development & npx tsx watch server.ts",
-    "start:original": "nodemon --exec npx ts-node server.ts",
-    "start:production": "NODE_ENV=production nodemon server.js",
-    "start:production-windows": "SET NODE_ENV=production & nodemon server.js",
+    "start": "NODE_ENV=development npx tsx watch server.ts",
+    "start:windows": "SET NODE_ENV=development & npx tsx watch server.ts",
     "data:import": "node src/dev-data/data/import-dev-data.js --import",
     "data:delete": "node src/dev-data/data/import-dev-data.js --delete",
     "debug": "ndb server.js"

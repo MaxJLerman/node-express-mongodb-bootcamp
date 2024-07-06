@@ -14,20 +14,6 @@ import userRouter from "./src/routes/userRoutes";
 import reviewRouter from "./src/routes/reviewRoutes";
 import viewRouter from "./src/routes/viewRoutes";
 
-export type EnvVariable = NodeJS.ProcessEnv & {
-  NODE_ENV: string;
-  PORT: number;
-  DATABASE: string;
-  DATABASE_PASSWORD: string;
-  JWT_SECRET: string;
-  JWT_EXPIRES_IN: string;
-  JWT_COOKIE_EXPIRES_IN: number;
-  EMAIL_HOST: string;
-  EMAIL_PORT: number;
-  EMAIL_USERNAME: string;
-  EMAIL_PASSWORD: string;
-};
-
 const app = express();
 
 app.set("view engine", "pug");
